@@ -1,6 +1,5 @@
 import React from 'react'
-import Head from 'next/head'
-import BottomPagination from '@/components/BottomPagination'
+import BottomPagination from './BottomPagination'
 function AboutYourPlace() {
     
   return (
@@ -22,7 +21,7 @@ function AboutYourPlace() {
  
     </div>       
    
-
+<BottomPagination/>
 
     </div>
   )

@@ -3,7 +3,7 @@ const bodyParser = require('body-parser')
 const multer = require('multer')
 const processFile = require("./middleware/upload");
 // const uploadImage = require('./helpers/helpers')
-const {mongoconnect} =require('./db');
+// const {mongoconnect} =require('./db');
 const cors=require('cors');
 const app = express()
 const PORT=5000
@@ -15,61 +15,71 @@ const { Storage } = require("@google-cloud/storage");
 const storage = new Storage({ keyFilename: "./keys.json" });
 const bucket = storage.bucket("drought-prediction-bucket");
 
+const Multer = multer({Storage})
 app.disable('x-powered-by')
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: false}))
 
-mongoconnect();
-app.post('/uploads', async (req, res, next) => {
- 
-    try {
-      await processFile(req, res);
-  
-      if (!req.file) {
-        return res.status(400).send({ message: "Please upload a file!" });
-      }
-        
-      // Create a new blob in the bucket and upload the file data.
-      const blob = bucket.file(req.file.originalname);
-      const blobStream = blob.createWriteStream({
-        resumable: false,
-      });
-  
-      blobStream.on("error", (err) => {
-        res.status(500).send({ message: err.message });
-      });
-  
-      blobStream.on("finish", async (data) => {
-        // Create URL for directly file access via HTTP.
-        const publicUrl = format(
-          `https://storage.googleapis.com/${bucket.name}/${blob.name}`
-        );
-  
-        try {
-          // Make the file public
-          await bucket.file(req.file.originalname).makePublic();
-        } catch {
-          return res.status(500).send({
-            message:
-              `Uploaded the file successfully: ${req.file.originalname}, but public access is denied!`,
-            url: publicUrl,
-          });
-        }
-  
-        res.status(200).send({
-          message: "Uploaded the file successfully: " + req.file.originalname,
-          url: publicUrl,
-        });
-      });
-  
-      blobStream.end(req.file.buffer);
-    } catch (err) {
-      res.status(500).send({
-        message: `Could not upload the file: ${req.file.originalname}. ${err}`,
-      });
-    }
+// mongoconnect();
+app.post('/uploads',Multer.array('file'), async (req, res, next) => {
+ console.log(req.files)
+  let files=[];
+  let arrtemp=req.files
+         const arr= arrtemp.map(async (file,i)=>{
+                
+                 try {
 
+  
+                  if (!file) {
+                    return { message: "Please upload a file!" }
+                  }
+                    
+                  
+                  
+                  const blob = bucket.file(file.originalname);
+                  const blobStream = blob.createWriteStream({
+                    resumable: false,
+                  });
+              
+                  blobStream.on("error", (err) => {
+                    return { message: err.message };
+                  });
+              
+                  blobStream.on("finish", async (data) => {
+                    // Create URL for directly file access via HTTP.
+                    const publicUrl = format(
+                      `https://storage.googleapis.com/${bucket.name}/${blob.name}`
+                    );
+              
+                    try {
+                      // Make the file public
+                      await bucket.file(file.originalname).makePublic();
+                    } catch {
+                      return {
+                        message:
+                          `Uploaded the file successfully: ${file.originalname}, but public access is denied!`,
+                        url: publicUrl,
+                      };
+                    }
+              
+                  
+                  });
+                  blobStream.end(file.buffer);
+                 
+                } catch (err) {
+                 return {
+                    message: `Could not upload the file: ${file.originalname}. ${err}`,
+                  };
+                }
+                return {
+                  message: "Uploaded the file successfully: " +file.originalname,
+                  url: `https://storage.googleapis.com/drought-prediction-bucket/${file.originalname}`,
+                }
+          })
+          const arr1=await Promise.all(arr)
+  
+  return res.json({files:arr1})
 })
 
 app.use((err, req, res, next) => {

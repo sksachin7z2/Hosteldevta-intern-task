@@ -1,5 +1,5 @@
 import React from 'react'
-
+import BottomPagination from './BottomPagination'
 function Dormitoryinfo() {
   return (
     <div>
@@ -20,7 +20,7 @@ function Dormitoryinfo() {
 
 </div>       
 
-
+<BottomPagination/>
 
 </div>
   )
