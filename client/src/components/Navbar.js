@@ -1,6 +1,22 @@
 import React,{useState} from 'react'
-
+import {useNavigate,Link} from 'react-router-dom'
+import {auth} from '../firebase-config'
+import {
+ 
+  signOut,
+  
+} from "firebase/auth";
 function Navbar() {
+  let navigate=useNavigate()
+  const handlelogout=async()=>{
+try {
+  await signOut(auth)
+} catch (error) {
+  alert(error)
+}
+
+navigate('/')
+  }
   const [toggle, setToggle] = useState(false)
   return (
     <div>
@@ -8,10 +24,10 @@ function Navbar() {
 <nav className="bg-[#ffffff40] lg:px-28 backdrop-blur-md  fixed w-full z-20 top-0 left-0 shadow-md ">
   <div className="max-w-screen-xl flex  items-center justify-between mx-auto p-4">
     <div>
-    <a href="https://flowbite.com/" className="flex items-center">
+    <Link to="/" className="flex items-center">
       <img src="https://flowbite.com/docs/images/logo.svg" className="h-8 mr-3" alt="Flowbite Logo"/>
       
-  </a>
+  </Link>
     </div>
  
   <div className="flex md:order-2">
@@ -24,22 +40,25 @@ function Navbar() {
   <div className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" >
     <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg  md:flex-row md:space-x-[4rem] md:mt-0 md:border-0 ">
       <li>
-        <a href="/" className="text-[#3f3d56] block py-2 pl-3 pr-4 rounded  md:p-0 " aria-current="page">Home</a>
+        <Link to="/" className="text-[#3f3d56] block py-2 pl-3 pr-4 rounded  md:p-0 " aria-current="page">Home</Link>
       </li>
       <li>
-        <a href="/about-us" className="text-[#3f3d56] block py-2 pl-3 pr-4 rounded  md:p-0 ">About</a>
+        <Link to="/about-us" className="text-[#3f3d56] block py-2 pl-3 pr-4 rounded  md:p-0 ">About</Link>
       </li>
       <li>
-        <a href="/contact-us" className="text-[#3f3d56] block py-2 pl-3 pr-4 rounded  md:p-0">Contact</a>
+        <Link to="/contact-us" className="text-[#3f3d56] block py-2 pl-3 pr-4 rounded  md:p-0">Contact</Link>
       </li>
       <li>
-        <a href="/help" className="text-[#3f3d56] block py-2 pl-3 pr-4 rounded  md:p-0 ">Help</a>
+        <Link to="/help" className="text-[#3f3d56] block py-2 pl-3 pr-4 rounded  md:p-0 ">Help</Link>
       </li>
       <li>
-      <button type="button" className="text-white bg-[#3f3d56] hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-1 text-center mr-3 md:mr-0 ">Login</button>
+     <Link to='/login'> <button type="button" className="text-white bg-[#3f3d56] hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-1 text-center mr-3 md:mr-0 ">Login</button></Link>
       </li>
       <li>
-      <button type="button" className="text-white bg-[#3f3d56] hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-1 text-center mr-3 md:mr-0 ">Signup</button>
+     <Link to='/signup'> <button type="button" className="text-white bg-[#3f3d56] hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-1 text-center mr-3 md:mr-0 ">Signup</button></Link>
+      </li>
+      <li>
+     <button onClick={handlelogout} type="button" className="text-white bg-[#3f3d56] hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-1 text-center mr-3 md:mr-0 ">Signup</button>
       </li>
     </ul>
   </div>
@@ -47,22 +66,22 @@ function Navbar() {
  {toggle&& <div className='md:hidden '>
   <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg  md:flex-row md:space-x-8 md:mt-0 md:border-0 ">
       <li>
-        <a href="/" className="block py-2 pl-3 pr-4   rounded  md:p-0 " aria-current="page">Home</a>
+        <Link to="/" className="block py-2 pl-3 pr-4   rounded  md:p-0 " aria-current="page">Home</Link>
       </li>
       <li>
-        <a href="/about-us" className="block py-2 pl-3 pr-4 text-gray-900 rounded  md:p-0 ">About</a>
+        <Link to="/about-us" className="block py-2 pl-3 pr-4 text-gray-900 rounded  md:p-0 ">About</Link>
       </li>
       <li>
-        <a href="/contact-us" className="block py-2 pl-3 pr-4  md:p-0 ">Contact</a>
+        <Link to="/contact-us" className="block py-2 pl-3 pr-4  md:p-0 ">Contact</Link>
       </li>
       <li>
-        <a href="/help" className="block py-2 pl-3 pr-4 text-gray-900 rounded md:p-0 ">Help</a>
+        <Link to="/help" className="block py-2 pl-3 pr-4 text-gray-900 rounded md:p-0 ">Help</Link>
       </li>
       <li className='md:mb-0 mb-3'>
-      <button type="button" className="text-white  bg-[#3F3D56] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-1 text-center mr-3 md:mr-0 ">Login</button>
+     <Link to='/login'> <button type="button" className="text-white  bg-[#3F3D56] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-1 text-center mr-3 md:mr-0 ">Login</button></Link>
       </li>
       <li>
-      <button type="button" className="text-white bg-[#3F3D56] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-1 text-center mr-3 md:mr-0 ">Signup</button>
+     <Link to='/signup'> <button type="button" className="text-white bg-[#3F3D56] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-1 text-center mr-3 md:mr-0 ">Signup</button></Link>
       </li>
     </ul>
   </div>}

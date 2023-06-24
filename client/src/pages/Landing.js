@@ -11,7 +11,7 @@ function Landing() {
         <div className="h-[100vh] " style={{backgroundImage:`url(${bg})` ,backgroundSize:"cover"}} >
        
         
-<div className='flex items-center h-[100vh] bg-[rgba(255, 255, 255, 0.24)] backdrop-blur-[8px] bg-[#ffffff35] px-7 md:px-0 '>
+<div className='flex items-center h-[100vh] bg-[rgba(255, 255, 255, 0.24)] backdrop-blur-[8px] bg-[#ffffff50] md:bg-[#ffffff35] px-7 md:px-0 '>
 <div className="grid grid-cols-1 md:grid-cols-2 pt-[20vh]">
       <div className='md:pl-[100px]  pb-[2rem]'>
         <div className='text-[2rem] text-[#3f3d56] font-bold'>Elevate Living Experience with 
@@ -20,7 +20,7 @@ the ease of DormInn!</div>
   Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nisi doloremque earum molestias exercitationem error ducimus obcaecati voluptas, cum explicabo, quae eum. Architecto nostrum ex alias 
 </div>
 <div className='my-5 md:my-0'>
-      <button type="button" className="text-white bg-[#3f3d56] hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center mr-3 md:mr-0 ">Get started now</button>
+      <button type="button" className="text-white bg-[#3f3d56]  focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center mr-3 md:mr-0 ">Get started now</button>
       </div>
       </div>
  

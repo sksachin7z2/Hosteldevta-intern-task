@@ -1,17 +1,25 @@
-const express = require("express");
-const router = express.Router();
-var fetchuser = require("../middleware/fetchuser");
-const Hosting = require("../model/Hosting");
-
+import express from 'express'
+import fetchuser from '../middleware/fetchuser.js'
+import db from "../firebase-config.js";
+import { collection, query, where, getDocs, getDoc, addDoc, doc, onSnapshot, limit, deleteDoc,updateDoc } from "firebase/firestore";
+const router = express.Router()
 
 router.get("/fetchallHosting",fetchuser, async (req, res) => {
   try {
-    const Hosting = await Hosting.find({ user: req.user.id });
-    res.json({allhost:Hosting});
+    
+    let q = query(collection(db, "hosting"), where("user", "==", req.user.id));
+    const hosting = await getDocs(q);
+    let arr1=hosting.docs.map((e)=>{
+        return (
+          e.data())
+    })
+    let arr2=await Promise.all(arr1);
+    res.json({allhost:arr2})
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Internal Server Error Occured");
   }
+
 });
 
 
@@ -21,7 +29,7 @@ router.post(
   async (req, res) => {
     try {
       const {title,description,price,discount,people,rooms,lat,lon,ammeneties,photos,contact,security} = req.body;
-     const hosting=await Hosting.create({
+     const hosting=await addDoc(collection(db,"hosting"),{
       title,description,price,discount,people,rooms,lat,lon,ammeneties,photos,contact,security,user:req.user.id
      })
 
@@ -36,15 +44,18 @@ router.post(
 router.put("/updateHosting/:id",fetchuser, async (req, res) => {
   const {title,description,price,discount,people,rooms,lat,lon,ammeneties,photos,contact,security} = req.body;
     try {
-        let host = await Hosting.findById(req.params.id)
+      const userId=req.params.id
+      const docRef = doc(db, "users", userId);
+      const docSnap = await getDoc(docRef);
        
-        if (!host) {
+        if (!docSnap.exists()) {
           return res.status(404).send("Not found");
         }
-        if (host.user.toString() !== req.user.id) {
+        if (docSnap.data().user.toString() !== req.user.id) {
           return res.status(401).send("not authorised");
         }
-        const updatedhosting=await Hosting.findByIdAndUpdate(req.params.id,{title:title?title:host.title,description:description?description:host.description,price:price?price:host.price,discount:discount?discount:host.discount,people:people?people:host.people,rooms:rooms?rooms:host.rooms,lat:lat?lat:host.lat,lon:lon?lon:host.lon,ammeneties:ammeneties?ammeneties:host.ammeneties,photos:photos?photos:host.photos,contact:contact?contact:host.contact,security:security?security:host.security},{new:true});
+        const host=docSnap.data()
+        const updatedhosting=await updateDoc(docRef,{title:title?title:host.title,description:description?description:host.description,price:price?price:host.price,discount:discount?discount:host.discount,people:people?people:host.people,rooms:rooms?rooms:host.rooms,lat:lat?lat:host.lat,lon:lon?lon:host.lon,ammeneties:ammeneties?ammeneties:host.ammeneties,photos:photos?photos:host.photos,contact:contact?contact:host.contact,security:security?security:host.security},{new:true});
         res.json({status:"Hosting info Updated",updatedinfo:updatedhosting})
     } catch (error) {
         console.error(error);
@@ -56,41 +67,43 @@ router.delete("/deleteHosting/:id",fetchuser, async (req, res) => {
 
   try {
    
-    let hosting = await Hosting.findById(req.params.id);
-    if (!hosting) {
+    const hostId=req.params.id
+    const docRef = doc(db, "users", hostId);
+    const docSnap = await getDoc(docRef);
+    if (!docSnap.exists()) {
       return res.status(404).send("Not found");
     }
     
-    if (hosting.user.toString() !== req.user.id) {
+    if (docSnap.data().user.toString() !== req.user.id) {
       return res.status(401).send("not authorised");
     }
-    hosting = await Hosting.findByIdAndDelete(req.params.id);
-    res.json({ success: "Hosting has been deleted", Hosting: Hosting });
+     await deleteDoc(docRef)
+    res.json({ success: "Hosting has been deleted", Hosting: docSnap.data() });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Internal Server Error Occured");
   }
 });
 
-router.delete("/deleteallHostings",fetchuser, async (req, res) => {
+// router.delete("/deleteallHostings",fetchuser, async (req, res) => {
 
-  try {
+//   try {
   
-    let Hostings = await Hosting.find();
-    if (!Hostings[0]) {
-      return res.status(404).send("Not found");
-    }
+//     let Hostings = await Hosting.find();
+//     if (!Hostings[0]) {
+//       return res.status(404).send("Not found");
+//     }
     
-    if (Hostings[0].user.toString() !== req.user.id) {
-      return res.status(401).send("not authorised");
-    }
+//     if (Hostings[0].user.toString() !== req.user.id) {
+//       return res.status(401).send("not authorised");
+//     }
    
-    while(Hostings!==null)
-    Hostings = await Hosting.findOneAndDelete() ;
-    res.json({ success: "all Hosting has been deleted" });
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).send("Internal Server Error Occured");
-  }
-});
-module.exports = router;
+//     while(Hostings!==null)
+//     Hostings = await Hosting.findOneAndDelete() ;
+//     res.json({ success: "all Hosting has been deleted" });
+//   } catch (error) {
+//     console.error(error.message);
+//     res.status(500).send("Internal Server Error Occured");
+//   }
+// });
+export default router

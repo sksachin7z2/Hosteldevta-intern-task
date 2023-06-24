@@ -1,4 +1,5 @@
-const jwt = require("jsonwebtoken");
+// const jwt = require("jsonwebtoken");
+import jwt from 'jsonwebtoken'
 const JWT_SECRET = "Hostel4>v7A";
 
 const fillter = (req, res, next) => {
@@ -15,5 +16,4 @@ const fillter = (req, res, next) => {
   }
  
 }
-
-module.exports = fillter;
+export default fillter

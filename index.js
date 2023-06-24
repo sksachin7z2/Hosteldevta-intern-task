@@ -1,19 +1,29 @@
-const express = require('express')
-const bodyParser = require('body-parser')
-const multer = require('multer')
-const processFile = require("./middleware/upload");
+// const express = require('express')
+import express from 'express'
+// const bodyParser = require('body-parser')
+import bodyParser from 'body-parser'
+import multer from 'multer'
+import cors from 'cors'
+
+import userRoute from './routes/user.js'
+import hostingRoute from './routes/hosting.js'
+// const multer = require('multer')
+// import processFile from './middleware/upload.js'
+// const processFile = require("./middleware/upload");
 // const uploadImage = require('./helpers/helpers')
 // const {mongoconnect} =require('./db');
-const cors=require('cors');
+// const cors=require('cors');
 const app = express()
 const PORT=5000
 app.use(cors())
 // const processFile = require("../middleware/upload");
-const { format } = require("util");
-const { Storage } = require("@google-cloud/storage");
+// const { format } = require("util");
+import { format } from 'util'
+// const { Storage } = require("@google-cloud/storage");
+import { Storage } from '@google-cloud/storage'
 // Instantiate a storage client with credentials
-const storage = new Storage({ keyFilename: "./keys.json" });
-const bucket = storage.bucket("drought-prediction-bucket");
+const storage = new Storage({ keyFilename: "./private/keys.json" , projectId:'dorminn' });
+const bucket = storage.bucket("media-bucket-7z2");
 
 const Multer = multer({Storage})
 app.disable('x-powered-by')
@@ -74,7 +84,7 @@ app.post('/uploads',Multer.array('file'), async (req, res, next) => {
                 }
                 return {
                   message: "Uploaded the file successfully: " +file.originalname,
-                  url: `https://storage.googleapis.com/drought-prediction-bucket/${file.originalname}`,
+                  url: `https://storage.googleapis.com/media-bucket-7z2/${file.originalname}`,
                 }
           })
           const arr1=await Promise.all(arr)
@@ -89,8 +99,8 @@ app.use((err, req, res, next) => {
   })
   next()
 })
-app.use('/api/auth',require('./routes/user'))
-app.use('/api/hosting',require('./routes/hosting'))
+app.use('/api/auth',userRoute)
+app.use('/api/hosting',hostingRoute)
 
 app.listen(PORT, () => {
   console.log(`server starting at port http://localhost:${PORT}`)
