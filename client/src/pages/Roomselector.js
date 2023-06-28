@@ -1,10 +1,59 @@
 import React, { useState, useEffect } from 'react'
-
-function Roomselector() {
+import {useNavigate,useLocation} from 'react-router-dom'
+import axios from 'axios'
+import Cookies from 'js-cookie'
+import Saveexit from '../components/Saveexit'
+function Roomselector({host}) {
+    const [status, setStatus] = useState({'1':false,'2':false,'3':false,'4':false,'5':false,'6':false,'7':false})
     const [Alltotal, setAlltotal] = useState([{
         nobpd: 0,
         nod: 0
     }])
+    const [bathrooms, setBathrooms] = useState(0)
+    const [toilets, setToilets] = useState(0)
+
+    const getroomdata=async()=>{
+        try {
+            const fetch=await axios.post(`${host}/api/hosting/fetchHosting/${params}`,{},{
+                headers:{"auth-token":Cookies.get('dorm--7z2__PMRW')}
+            })
+            const data=fetch.data;
+            console.log(data)
+         setAlltotal(data?.host?.rooms)
+         setToilets(data?.host?.toilets)
+         setBathrooms(data?.host?.bathrooms)
+         setStatus(data?.host?.status)
+        } catch (error) {
+            console.log(error)
+        }
+      
+      }
+      useEffect(() => {
+       getroomdata();
+    
+      }, [])
+
+    let navigate=useNavigate()
+    let location=useLocation()
+    let params=location.pathname.split('/')[2];
+    const handlenext=async()=>{
+        let obj=status;
+        obj['4']=true;
+        console.log(obj)
+        try {
+            const updaterooms=await axios.put(`${host}/api/hosting/updateHosting/${params}`,{rooms:Alltotal,toilets:toilets,bathrooms:bathrooms,status:obj},{
+                headers:{
+                    "auth-token":Cookies.get('dorm--7z2__PMRW')
+                }
+            })
+            console.log(updaterooms.data)
+            navigate(`/hosting/${params}/moreinfo`)
+        } catch (error) {
+            console.log(error)
+        }
+    
+    }
+  
     // const [Noofbedpd, setNoofbedpd] = useState(0)
     // const [Noofdorms, setNoofdorms] = useState(0)
     const [helper, setHelper] = useState(false)
@@ -67,10 +116,11 @@ let ans=arr.filter((e)=>e!=undefined)
 
     return (
         <div>
+          
             <div className='h-[85vh]'>
                 <div className='h-[85vh] ' >
                     <div className='h-[75vh] flex justify-center  mt-[15vh] overflow-y-scroll '>
-                        <div className='w-[50vw]'>
+                        <div className='w-[70vw]'>
                             <div className='text-[2rem] text-[#3F3D56] font-semibold'>
                                 Give some lowdown on your cozy abode!
                             </div>
@@ -105,7 +155,7 @@ let ans=arr.filter((e)=>e!=undefined)
 <path d="M21.3984 25.7383H29.6016V27.4961H21.3984V25.7383Z" fill="#3F3D56" fill-opacity="0.5"/>
 </svg>
 </div>
-                                                    <input className='w-[2rem] text-center' type="number" readOnly value={Noofbedpd} min={0} />
+                                                    <input className='w-[2.5rem] text-center' type="number" readOnly value={Noofbedpd} min={0} />
                                                     <div onClick={() => { ev2(e, i) }}><svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
 <circle cx="25" cy="25" r="24.5" fill="#FDFDFD" stroke="#3F3D56"/>
 <path d="M21.2852 24.5078H25.6211V20.1719H27.3789V24.5078H31.7148V26.2656H27.3789V30.6602H25.6211V26.2656H21.2852V24.5078Z" fill="#3F3D56"/>
@@ -161,7 +211,43 @@ let ans=arr.filter((e)=>e!=undefined)
 
 </g>
 
-</svg><div> Add Entry</div></div>
+</svg><div> Add More</div></div>
+                            </div>
+                            <div className='rounded p-3 my-5 border'>
+                                <div>Bathrooms</div>
+                                <div>
+                                <div className='my-2 flex gap-3'>
+                                                    <div onClick={() => {setBathrooms((prev)=>((prev-1)<0)?prev:prev-1) }}><svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="25" cy="25" r="25" fill="#FDFDFD"/>
+<circle cx="25" cy="25" r="24.5" stroke="#3F3D56" stroke-opacity="0.5"/>
+<path d="M21.3984 25.7383H29.6016V27.4961H21.3984V25.7383Z" fill="#3F3D56" fill-opacity="0.5"/>
+</svg>
+</div>
+                                                    <input className='w-[2.5rem] text-center' type="number" readOnly value={bathrooms} min={0} />
+                                                    <div onClick={() => {setBathrooms(prev=>prev+1) }}><svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="25" cy="25" r="24.5" fill="#FDFDFD" stroke="#3F3D56"/>
+<path d="M21.2852 24.5078H25.6211V20.1719H27.3789V24.5078H31.7148V26.2656H27.3789V30.6602H25.6211V26.2656H21.2852V24.5078Z" fill="#3F3D56"/>
+</svg></div>
+                                                </div>
+                                </div>
+                            </div>
+                            <div className='rounded p-5 border'>
+                                <div>Toilets</div>
+                                <div>
+                                <div className='my-2 flex gap-3'>
+                                                    <div onClick={() => {setToilets((prev)=>((prev-1)<0)?prev:prev-1) }}><svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="25" cy="25" r="25" fill="#FDFDFD"/>
+<circle cx="25" cy="25" r="24.5" stroke="#3F3D56" stroke-opacity="0.5"/>
+<path d="M21.3984 25.7383H29.6016V27.4961H21.3984V25.7383Z" fill="#3F3D56" fill-opacity="0.5"/>
+</svg>
+</div>
+                                                    <input className='w-[2.5rem] text-center' type="number" readOnly value={toilets} min={0} />
+                                                    <div onClick={() => {setToilets(prev=>prev+1) }}><svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="25" cy="25" r="24.5" fill="#FDFDFD" stroke="#3F3D56"/>
+<path d="M21.2852 24.5078H25.6211V20.1719H27.3789V24.5078H31.7148V26.2656H27.3789V30.6602H25.6211V26.2656H21.2852V24.5078Z" fill="#3F3D56"/>
+</svg></div>
+                                                </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -173,13 +259,13 @@ let ans=arr.filter((e)=>e!=undefined)
                                         <path d="M28.05 35.9999L16 23.9499L28.05 11.8999L30.2 14.0499L20.3 23.9499L30.2 33.8499L28.05 35.9999Z" fill="#3F3D56" />
                                     </svg>
 
-                                    <button type="button" className="text-[#3F3D56] bg-white  focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-1 text-center mr-3 md:mr-0 ">Back</button>
+                                    <button onClick={()=>{navigate(`/hosting/${params}/locate-your-dorm`)}} type="button" className="text-[#3F3D56] bg-white  focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-1 text-center mr-3 md:mr-0 ">Back</button>
                                 </div>
 
                             </div>
                             <div>
                                 <div className='flex'>
-                                    <button type="button" className="text-white bg-[#3F3D56]  focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-1 text-center mr-3 md:mr-0 ">Next</button>
+                                    <button onClick={handlenext} type="button" className="text-white bg-[#3F3D56]  focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-1 text-center mr-3 md:mr-0 ">Next</button>
                                     <svg width="48" height="30" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M18.75 35.9999L16.6 33.8499L26.5 23.9499L16.6 14.0499L18.75 11.8999L30.8 23.9499L18.75 35.9999Z" fill="#3F3D56" />
                                     </svg>

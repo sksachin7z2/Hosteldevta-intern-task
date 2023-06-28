@@ -39,7 +39,7 @@ const Signup = () => {
   if(!res.authToken)
   alert("wrong credentials")
   else{
-       Cookies.set('auth-Tokensynex',res.authToken)
+       Cookies.set('dorm--7z2__PMRW',res.authToken)
         navigate('/dashboard')
   }
      
@@ -70,12 +70,12 @@ const Signup = () => {
           {
             const login=await axios.post(`${url}/login1`,{email:Cookies.get('email')});
             const data=login.data;
-            Cookies.set('auth-Tokensynex',data.authToken)
+            Cookies.set('dorm--7z2__PMRW',data.authToken)
             navigate('/dashboard')
             return;
           }
           else
-          Cookies.set('auth-Tokensynex',res.authToken)
+          Cookies.set('dorm--7z2__PMRW',res.authToken)
           
            
           

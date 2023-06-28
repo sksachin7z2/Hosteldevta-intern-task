@@ -26,7 +26,7 @@ const res=resp.data
 if(!res.authToken)
 alert("user exist with this email")
 else{
-    Cookies.set('auth-Tokensynex',res.authToken)
+    Cookies.set('dorm--7z2__PMRW',res.authToken)
      navigate('/dashboard')
 }
 } catch (error) {
@@ -56,12 +56,12 @@ else{
         {
           const login=await axios.post(`${url}/login1`,{email:Cookies.get('email')});
           const data=login.data;
-          Cookies.set('auth-Tokensynex',data.authToken)
+          Cookies.set('dorm--7z2__PMRW',data.authToken)
           navigate('/dashboard')
           return;
         }
         else
-        Cookies.set('auth-Tokensynex',res.authToken)
+        Cookies.set('dorm--7z2__PMRW',res.authToken)
         
          
         

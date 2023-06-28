@@ -1,8 +1,12 @@
-import React,{useState} from 'react'
-
-function Addammeneties() {
+import React,{useState,useEffect} from 'react'
+import {useNavigate,useLocation} from 'react-router-dom'
+import axios from 'axios'
+import Cookies from 'js-cookie'
+import Saveexit from '../components/Saveexit'
+function Addammeneties({host}) {
     const [ammeneties, setAmmeneties] = useState({wifi:false,TV:false,washingmachine:false,studyplace:false,airconditioning:false,bathrooms:false,mess:false,toilets:false,water:false,gym:false,playarea:false,unisex:false,kitchen:false})
     let arr=['wifi','TV','washingmachine','studyplace','airconditioning','bathrooms','mess','toilets','water','gym','playarea','unisex','kitchen']
+    const [status, setStatus] = useState({'1':false,'2':false,'3':false,'4':false,'5':false,'6':false,'7':false})
 const handlestate=(id)=>{
     // if(id===0){
     //     setAmmeneties({...ammeneties,['wifi']:!ammeneties.wifi})
@@ -10,9 +14,49 @@ const handlestate=(id)=>{
     // else if(id===1)
     // setAmmeneties({...ammeneties,['TV']:!ammeneties.})
     setAmmeneties({...ammeneties,[arr[id]]:!ammeneties[arr[id]]})
+ 
 }
+const getroomdata=async()=>{
+    try {
+        const fetch=await axios.post(`${host}/api/hosting/fetchHosting/${params}`,{},{
+            headers:{"auth-token":Cookies.get('dorm--7z2__PMRW')}
+        })
+        const data=fetch.data;
+        console.log(data)
+     setAmmeneties(data?.host?.ammeneties)
+     setStatus(data?.host?.status)
+    } catch (error) {
+        console.log(error)
+    }
+  
+  }
+  useEffect(() => {
+   getroomdata();
+
+  }, [])
+   let navigate=useNavigate()
+    let location=useLocation()
+    let params=location.pathname.split('/')[2];
+    const handlenext=async()=>{
+        let obj=status;
+        obj['1']=true;
+        console.log(obj)
+        try {
+            const updateammeneties=await axios.put(`${host}/api/hosting/updateHosting/${params}`,{ammeneties:ammeneties,status:obj},{
+                headers:{
+                    "auth-token":Cookies.get('dorm--7z2__PMRW')
+                }
+            })
+            console.log(updateammeneties.data)
+            navigate(`/hosting/${params}/add-photo`)
+        } catch (error) {
+            console.log(error)
+        }
+    
+    }
   return (
     <div>
+        
             <div className='h-[85vh]' >
                 <div className='h-[85vh] bg-[#FFFFFF30] ' >
                     <div className='h-[75vh] flex justify-center mt-[15vh] overflow-y-scroll'>
@@ -152,20 +196,20 @@ const handlestate=(id)=>{
                         </div>
                     </div>
                     <div className='h-[10vh]'>
-                        <div className='flex justify-between items-center'>
+                        <div className=' h-[10vh] flex justify-between items-center'>
                             <div>
                                 <div className='flex'>
                                 <svg width="48" height="30" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M28.05 35.9999L16 23.9499L28.05 11.8999L30.2 14.0499L20.3 23.9499L30.2 33.8499L28.05 35.9999Z" fill="#3F3D56"/>
 </svg>
 
-                            <button type="button" className="text-[#3F3D56] bg-white  focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-1 text-center mr-3 md:mr-0 ">Back</button>
+                            <button onClick={()=>{navigate(`/hosting/${params}/moreinfo`)}} type="button" className="text-[#3F3D56] bg-white  focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-1 text-center mr-3 md:mr-0 ">Back</button>
                                 </div>
                            
                             </div>
                             <div>
                                 <div className='flex'>
-                                <button type="button" className="text-white bg-[#3F3D56]  focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-1 text-center mr-3 md:mr-0 ">Next</button>
+                                <button onClick={handlenext} type="button" className="text-white bg-[#3F3D56]  focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-1 text-center mr-3 md:mr-0 ">Next</button>
                             <svg width="48" height="30" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M18.75 35.9999L16.6 33.8499L26.5 23.9499L16.6 14.0499L18.75 11.8999L30.8 23.9499L18.75 35.9999Z" fill="#3F3D56"/>
 </svg>

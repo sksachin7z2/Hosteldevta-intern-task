@@ -4,7 +4,8 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import multer from 'multer'
 import cors from 'cors'
-
+import path from 'path'
+import crypto from 'crypto'
 import userRoute from './routes/user.js'
 import hostingRoute from './routes/hosting.js'
 // const multer = require('multer')
@@ -37,7 +38,18 @@ app.post('/uploads',Multer.array('file'), async (req, res, next) => {
   let files=[];
   let arrtemp=req.files
          const arr= arrtemp.map(async (file,i)=>{
-                
+          let encryptedfilename= new Promise((resolve, reject) => {
+            crypto.randomBytes(16, (err, buf) => {
+              if (err) {
+                return reject(err);
+              }
+              const filename = buf.toString('hex') + path.extname(file.originalname);
+              
+              resolve(filename);
+            });
+          });
+          let newfilename=await encryptedfilename
+          console.log(newfilename)
                  try {
 
   
@@ -45,9 +57,9 @@ app.post('/uploads',Multer.array('file'), async (req, res, next) => {
                     return { message: "Please upload a file!" }
                   }
                     
-                  
-                  
-                  const blob = bucket.file(file.originalname);
+                 
+                  const blob = bucket.file(newfilename);
+             
                   const blobStream = blob.createWriteStream({
                     resumable: false,
                   });
@@ -64,11 +76,11 @@ app.post('/uploads',Multer.array('file'), async (req, res, next) => {
               
                     try {
                       // Make the file public
-                      await bucket.file(file.originalname).makePublic();
+                      await bucket.file(newfilename).makePublic();
                     } catch {
                       return {
                         message:
-                          `Uploaded the file successfully: ${file.originalname}, but public access is denied!`,
+                          `Uploaded the file successfully: ${newfilename}, but public access is denied!`,
                         url: publicUrl,
                       };
                     }
@@ -79,12 +91,12 @@ app.post('/uploads',Multer.array('file'), async (req, res, next) => {
                  
                 } catch (err) {
                  return {
-                    message: `Could not upload the file: ${file.originalname}. ${err}`,
+                    message: `Could not upload the file: ${newfilename}. ${err}`,
                   };
                 }
                 return {
                   message: "Uploaded the file successfully: " +file.originalname,
-                  url: `https://storage.googleapis.com/media-bucket-7z2/${file.originalname}`,
+                  url: `https://storage.googleapis.com/media-bucket-7z2/${newfilename}`,
                 }
           })
           const arr1=await Promise.all(arr)

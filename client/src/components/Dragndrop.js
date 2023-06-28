@@ -1,20 +1,24 @@
-import React from 'react'
+import React,{useState} from 'react'
 
-export default function DragDropFile() {
+export default function DragDropFile({setFiles,files,photos,setPhotos}) {
+ 
     // drag state
     const [dragActive, setDragActive] = React.useState(false);
     // ref
-    const [photos, setPhotos] = React.useState([])
+   
     const inputRef = React.useRef(null);
     
-    function handleFile(files) {
+    function handleFile(file) {
         let arr=[]
-       Array.from(files).map((e,i)=>{
-            var fileName = URL.createObjectURL(files[i]);
+        let arr1=[]
+       Array.from(file).map((e,i)=>{
+              arr1.push(e);
+            var fileName = URL.createObjectURL(file[i]);
             arr.push(fileName)
         })
         setPhotos([...photos,...arr])
-        console.log(files,typeof files)
+        setFiles([...files,...arr1])
+        console.log(arr1)
        
       }
     // handle drag events
@@ -55,6 +59,11 @@ export default function DragDropFile() {
         delete arr[id];
         let ans=arr.filter(e=>e!=undefined)
         setPhotos(ans)
+
+        let arr1=files;
+        delete arr1[id];
+        let ans1=arr1.filter(e=>e!=undefined)
+        setFiles(ans1)
 
     }
     return (
