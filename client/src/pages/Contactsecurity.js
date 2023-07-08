@@ -53,6 +53,7 @@ const [helper, setHelper] = useState(false)
             let obj=status;
         obj['3']=true;
         console.log(obj)
+        if(contact[0].contact!==""){
             const updaterooms=await axios.put(`${host}/api/hosting/updateHosting/${params}`,{security:security,contact:contact,status:obj},{
                 headers:{
                     "auth-token":Cookies.get('dorm--7z2__PMRW')
@@ -61,6 +62,9 @@ const [helper, setHelper] = useState(false)
             console.log(updaterooms.data)
             
             navigate(`/hosting/${params}/review-listing`)
+        }
+        else
+        alert("Enter contact number")
         } catch (error) {
             console.log(error)
         }

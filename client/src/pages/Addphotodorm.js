@@ -52,6 +52,8 @@ function Addphotodorm({host}) {
             let obj=status;
         obj['2']=true;
         console.log(obj)
+       let a=[...arr2,...arr1].length
+        if(a>3){
           const updateammeneties=await axios.put(`${host}/api/hosting/updateHosting/${params}`,{photos:[...arr2,...arr1],status:obj},{
               headers:{
                 
@@ -60,6 +62,10 @@ function Addphotodorm({host}) {
           })
           console.log(updateammeneties.data)
           navigate(`/hosting/${params}/add-title-description`)
+        }
+        else{
+            alert('select at least three img')
+        }
       } catch (error) {
           console.log(error)
       }

@@ -38,6 +38,8 @@ function TitleandDescription({host}) {
         let obj=status;
         obj['5']=true;
         console.log(obj)
+        if(title!=="" && description!=="")
+        {
     
           const update=await axios.put(`${host}/api/hosting/updateHosting/${params}`,{title:title,description:description,status:obj},{
               headers:{
@@ -47,10 +49,14 @@ function TitleandDescription({host}) {
           })
           console.log(update.data)
           navigate(`/hosting/${params}/step3`)
+        }
+        else{
+            alert("title or description cannot be empty")
+        }
       } catch (error) {
           console.log(error)
       }
-  
+    
   }
     return (
         <div>

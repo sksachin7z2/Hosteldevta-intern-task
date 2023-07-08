@@ -3,6 +3,7 @@ import bg from '../static/homebg.jpeg'
 import dd1 from '../static/dweller1.jpeg'
 import dd2 from '../static/dweller2.jpeg'
 import cc from '../static/connect1.jpeg'
+import {Link} from 'react-router-dom'
 function Landing() {
   
   return (
@@ -20,7 +21,7 @@ the ease of DormInn!</div>
   Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nisi doloremque earum molestias exercitationem error ducimus obcaecati voluptas, cum explicabo, quae eum. Architecto nostrum ex alias 
 </div>
 <div className='my-5 md:my-0'>
-      <button type="button" className="text-white bg-[#3f3d56]  focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center mr-3 md:mr-0 ">Get started now</button>
+      <button type="button" className="text-white bg-[#3f3d56]  focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center mr-3 md:mr-0 "> <Link to='/dashboard'> Get started now</Link></button>
       </div>
       </div>
  
@@ -108,7 +109,7 @@ all set up for your first guest.
         </div>
           </div>
           <div className='text-center md:my-3 my-[2rem]'>
-      <button type="button" className="text-white bg-[#3f3d56] hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center mr-3 md:mr-0 ">Get started now</button>
+      <button type="button" className="text-white bg-[#3f3d56] hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center mr-3 md:mr-0 "> <Link to='/hostdashboard'> Get started now</Link></button>
       </div>
         </section>
         <section>
@@ -171,7 +172,7 @@ has options for you.
                         Sign up and start booking your dorm room today.
                         </div>
                         <div className='text-center mt-6'>
-                        <button type="button" className="text-[#3F3D56] bg-[#FDFDFD]  focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center mr-3 md:mr-0 ">Sign Up</button>
+                        <button type="button" className="text-[#3F3D56] bg-[#FDFDFD]  focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center mr-3 md:mr-0 "> <Link to='/signup'> Sign Up</Link></button>
                         </div>
                   </div>
                 </div>

@@ -14,6 +14,7 @@ function Locateyourdorm({lat,lon,setLon,setLat,getlocation,host}) {
         let obj=status;
         obj['7']=true;
         console.log(obj)
+        if(lat!==null && lon!==null){
         try {
             const updatelatlng=await axios.put(`${host}/api/hosting/updateHosting/${params}`,{lat:lat,lon:lon,address:address,status:obj},{
                 headers:{
@@ -25,7 +26,11 @@ function Locateyourdorm({lat,lon,setLon,setLat,getlocation,host}) {
         } catch (error) {
             console.log(error)
         }
-    
+        }
+        else
+        {
+            alert('give a address')
+        }
     }
   return (
     <div>

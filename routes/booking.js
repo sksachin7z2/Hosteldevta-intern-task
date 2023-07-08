@@ -4,10 +4,10 @@ import db from "../firebase-config.js";
 import { collection, query, where, getDocs, getDoc, addDoc, doc, onSnapshot, limit, deleteDoc,updateDoc } from "firebase/firestore";
 const router = express.Router()
 
-router.post("/fetchglobalHosting", async (req, res) => {
+router.post("/fetchallBookingUser",fetchuser, async (req, res) => {
   try {
     
-    let q = query(collection(db, "hosting"));
+    let q = query(collection(db, "booking"), where("user", "==", req.user.id));
     const hosting = await getDocs(q);
     let arr1=hosting.docs.map((e)=>{
       let obj=e.data()
@@ -23,10 +23,10 @@ router.post("/fetchglobalHosting", async (req, res) => {
   }
 
 });
-router.post("/fetchallHosting",fetchuser, async (req, res) => {
+router.get("/fetchallBookingHost/:id", async (req, res) => {
   try {
     
-    let q = query(collection(db, "hosting"), where("user", "==", req.user.id));
+    let q = query(collection(db, "booking"), where("hostId", "==", req.params.id));
     const hosting = await getDocs(q);
     let arr1=hosting.docs.map((e)=>{
       let obj=e.data()
@@ -42,14 +42,17 @@ router.post("/fetchallHosting",fetchuser, async (req, res) => {
   }
 
 });
-router.post("/fetchHosting/:id",fetchuser, async (req, res) => {
+router.post("/fetchBooking/:id",fetchuser, async (req, res) => {
   try {
     
     const hostId=req.params.id
-      const docRef = doc(db, "hosting", hostId);
+      const docRef = doc(db, "booking", hostId);
       const docSnap = await getDoc(docRef);
       if (!docSnap.exists()) {
         return res.status(404).send("Not found");
+      }
+      if (docSnap.data().user.toString() !== req.user.id) {
+        return res.status(401).send("not authorised");
       }
       let obj=docSnap.data();
       obj['id']=docSnap.id
@@ -63,17 +66,19 @@ router.post("/fetchHosting/:id",fetchuser, async (req, res) => {
 
 
 router.post(
-  "/addHosting",
+  "/addBooking/:id",
   fetchuser,
   async (req, res) => {
     try {
-      const {title,description,price,discount,bathrooms,toilets,rooms,lat,status,lon,address,ammeneties,photos,contact,security,totalbed} = req.body;
-      console.log(status)
-     const hosting=await addDoc(collection(db,"hosting"),{
-      title,description,price,discount,rooms,bathrooms,toilets,lat,lon,ammeneties,status,address,photos,contact,security,totalbed,user:req.user.id
+      console.log(req.params.id)
+      const {checkin,checkout,adults,children,infants,bookedon,price,totalbedorrooms,comments,reviews,bed,room,rd,pan,phone} = req.body;
+      const hostId=req.params.id;
+     const booking=await addDoc(collection(db,"booking"),{
+      checkin,checkout,adults,children,infants,rd,bookedon,bed,room,price,totalbedorrooms,comments,reviews,pan,phone,user:req.user.id,hostId:hostId
      })
 
-      res.json({host:hosting.id});
+      res.json({bookId:booking.id});
+
     } catch (error) {
       console.error(error.message);
       res.status(500).send("Internal Server Error Occured");
@@ -81,12 +86,12 @@ router.post(
   }
 );
 
-router.put("/updateHosting/:id",fetchuser, async (req, res) => {
-  const {title,description,price,discount,rooms,lat,lon,bathrooms,toilets,ammeneties,photos,contact,security,address,status,totalbed} = req.body;
+router.put("/updateBooking/:id",fetchuser, async (req, res) => {
+  const {checkin,checkout,adults,children,infants,bookedon,price,totalbedorrooms,comments,reviews,bed,room,rd,pan,phone} = req.body;
     try {
    
-      const userId=req.params.id
-      const docRef = doc(db, "hosting", userId);
+      const bookId=req.params.id
+      const docRef = doc(db, "booking", bookId);
       const docSnap = await getDoc(docRef);
        
         if (!docSnap.exists()) {
@@ -96,19 +101,20 @@ router.put("/updateHosting/:id",fetchuser, async (req, res) => {
           return res.status(401).send("not authorised");
         }
         const host=docSnap.data()
-        const updatedhosting=await updateDoc(docRef,{title:title?title:host.title,bathrooms:bathrooms?bathrooms:host.bathrooms,toilets:toilets?toilets:host.toilets,description:description?description:host.description,price:price?price:host.price,discount:discount?discount:host.discount,rooms:rooms?rooms:host.rooms,lat:lat?lat:host.lat,lon:lon?lon:host.lon,ammeneties:ammeneties?ammeneties:host.ammeneties,photos:photos?photos:host.photos,contact:contact?contact:host.contact,security:security?security:host.security,address:address?address:host.address,status:status?status:host.status,totalbed:totalbed?totalbed:host.totalbed});
-        res.json({status:"Hosting info Updated",updatedinfo:updatedhosting})
+        const updatedbooking=await updateDoc(docRef,{checkin:checkin?checkin:host.checkin,checkout:checkout?checkout:host.checkout,comments:comments?comments:host.comments,reviews:reviews?reviews:host.reviews,price:price?price:host.price,bookedon:bookedon?bookedon:host.bookedon,infants:infants?infants:host.infants,adults:adults?adults:host.adults,children:children?children:host.children,bed:bed?bed:host.bed,room:room?room:host.room,totalbedorrooms:totalbedorrooms?totalbedorrooms:host.totalbedorrooms,rd:rd?rd:host.rd,pan:pan?pan:host.pan,phone:phone?phone:host.phone});
+        res.json({status:"Hosting info Updated",updatedinfo:updatedbooking})
     } catch (error) {
         console.error(error);
     res.status(500).send("Internal Server Error Occured");
     }
 });
 
-router.post("/deleteHosting/:id",fetchuser, async (req, res) => {
+router.delete("/deleteBooking/:id",fetchuser, async (req, res) => {
 
   try {
-    const hostId=req.params.id
-    const docRef = doc(db, "hosting", hostId);
+   
+    const bookId=req.params.id
+    const docRef = doc(db, "booking", bookId);
     const docSnap = await getDoc(docRef);
     if (!docSnap.exists()) {
       return res.status(404).send("Not found");
@@ -118,7 +124,7 @@ router.post("/deleteHosting/:id",fetchuser, async (req, res) => {
       return res.status(401).send("not authorised");
     }
      await deleteDoc(docRef)
-    res.json({ success: "Hosting has been deleted", Hosting: docSnap.data() });
+    res.json({ success: "Hosting has been deleted", booking: docSnap.data() });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Internal Server Error Occured");

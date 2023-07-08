@@ -9,6 +9,7 @@ import Hosting from './pages/Hosting';
 import Navbar from './components/Navbar';
 import Gethostlocation from './components/GethostLocation' 
 import Getyourlocation from './components/Getyourlocation' 
+import {UserAuthContextProvider  as Context} from './context/auth'
 import Aboutyourplace from './components/Aboutyourplace'
 import Dormitoryinfo from './components/Dormitoryinfo'
 import AboutYourDorm from './pages/AboutYourDorm';
@@ -26,7 +27,9 @@ import ReviewListing from './pages/ReviewListing';
 import UserDashboard from './pages/userDashboard/UserDashboard';
 import HostingLast from './pages/HostingLast'
 import Listings from './pages/Listing'
+import Details from './pages/userDashboard/Details'
 import SecurityContact from './pages/Contactsecurity'
+import Payment from './pages/userDashboard/Payment';
 function App(props) {
   const host="http://localhost:5000"
   const [lat, setLat] = useState(0)
@@ -42,12 +45,18 @@ useEffect(() => {
 }, [])
 
   return (
+    <Context>
     <Router>
       <Navbar/>
       <Routes>
         <Route exact path='/' element={<Landing host={host}/>}/>
         <Route exact path='/hostdashboard' element={<Hosting host={host}/>}/>
+
         <Route exact path='/dashboard' element= {<UserDashboard host={host}/>}/>
+        <Route exact path='/detail/:id' element= {<Details host={host}/>}/>
+        <Route exact path='/payment/:id/:bid' element= {<Payment host={host}/>}/>
+
+
         <Route exact path='/getlocationok' element={ <Getyourlocation host={host} lat={lat} lon ={lon} setLon={setLon} setLat={setLat} getlocation={getlocation}/> }  />
         <Route exact path='/aboutyourplace' element={ <Aboutyourplace host={host}/> }  />
         <Route exact path='/dormitoryinfo' element={ <Dormitoryinfo host={host}/> }  />
@@ -78,6 +87,7 @@ useEffect(() => {
           <Route exact path='/login' element={<Login host={host}/>}/> 
                 </Routes>
     </Router>
+    </Context>
   );
 }
 

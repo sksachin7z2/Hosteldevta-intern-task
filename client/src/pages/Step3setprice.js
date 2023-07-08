@@ -15,7 +15,8 @@ function Setprice({host}) {
         try {
             let obj=status;
         obj['6']=true;
-        console.log(obj)
+        console.log(Object.keys(price).length,price)
+       if(Object.keys(price).length>0){
             const update=await axios.put(`${host}/api/hosting/updateHosting/${params}`,{price:price,status:obj},{
                 headers:{
                     "auth-token":Cookies.get('dorm--7z2__PMRW')
@@ -25,6 +26,10 @@ function Setprice({host}) {
             console.log(data)
             // console.log(updateammeneties.data())
             navigate(`/hosting/${params}/securitycontact`)
+        }
+        else{
+            alert("set the price")
+        }
         } catch (error) {
             console.log(error)
         }

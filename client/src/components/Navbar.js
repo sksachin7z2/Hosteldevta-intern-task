@@ -32,7 +32,7 @@ navigate('/')
   <div className="max-w-screen-xl flex  items-center justify-between mx-auto p-4">
     <div>
     <Link to="/" className="flex items-center">
-      <img src="/Group.png" className="h-8 mr-3" alt="Flowbite Logo"/>
+      <img src="/DormLogo.png" className="h-8 mr-3" alt="Flowbite Logo"/>
       
   </Link>
     </div>
@@ -45,7 +45,7 @@ navigate('/')
       </div>
       <div>
      <Link to='/signup'> <button type="button" className="text-white bg-[#3f3d56] hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-1 text-center mr-3 md:mr-0 ">Signup</button></Link>
-      </div></div>:<div div className='flex gap-5 items-center'> {(location.pathname==='/listings')&&<div onClick={()=>navigate('/hostdashboard')} className='font-semibold px-2 py-1 cursor-pointer border border-[#3F3D56] text-[#3F3D56] rounded-full'>Hosting</div>} <div className='relative cursor-pointer' onClick={()=>{setAccount(!account)}}>{(location?.pathname?.split('/')?.at(1)==="hosting")?<Saveexit/>:(Cookies.get('dp'))? <Avatar size='30' src={Cookies.get('dp')}  round={true} />:<Avatar name={Cookies.get('name')} size='30'  round={true} />}
+      </div></div>:<div  className='flex gap-5 items-center'> {(location.pathname==='/listings' ||location.pathname==='/dashboard')&&<div onClick={()=>navigate('/hostdashboard')} className='font-semibold px-2 py-1 cursor-pointer  text-[#3F3D56] rounded-full'>Hosting</div>} <div className='relative cursor-pointer' onClick={()=>{setAccount(!account)}}>{(location?.pathname?.split('/')?.at(1)==="hosting")?<Saveexit/>:(Cookies.get('dp'))? <Avatar size='30' src={Cookies.get('dp')}  round={true} />:<Avatar name={Cookies.get('name')} size='30'  round={true} />}
       
     { account&& <div className="absolute right-2">
 
@@ -65,6 +65,15 @@ navigate('/')
             <div>
 <Link to='/listings'>
 Listings
+</Link>
+          
+            </div>
+          </div>
+          <div className='flex items-center gap-2'>
+          <svg width='16' height='16' viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg"  fill="#FFFFFF"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>Dashboard</title> <g id="Dashboard" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> <rect id="Container" x="0" y="0" width="24" height="24"> </rect> <rect id="shape-1" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" x="4" y="4" width="16" height="16" rx="2"> </rect> <line x1="4" y1="9" x2="20" y2="9" id="shape-2" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"> </line> <line x1="9" y1="10" x2="9" y2="20" id="shape-3" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"> </line> </g> </g></svg>
+            <div>
+<Link to='/dashboard'>
+Dashboard
 </Link>
           
             </div>
@@ -170,7 +179,7 @@ Listings
          */}
         
       </li>
-      </ul>: <div className='px-5'>  <Saveexit/></div>}
+      </ul>:(location?.pathname?.split('/')?.at(1)==="hosting")? <div className='px-5'>  <Saveexit/></div> : <div></div> }
       {!( Cookies.get('dorm--7z2__PMRW'))? <div className='px-5 space-y-2 mb-5'> <div>
     <Link to='/login'> <button type="button" className="text-white bg-[#3f3d56] hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-1 text-center mr-3 md:mr-0 ">Login</button></Link>
       </div>

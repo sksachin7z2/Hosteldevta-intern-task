@@ -8,6 +8,7 @@ import path from 'path'
 import crypto from 'crypto'
 import userRoute from './routes/user.js'
 import hostingRoute from './routes/hosting.js'
+import bookingRoute from './routes/booking.js'
 // const multer = require('multer')
 // import processFile from './middleware/upload.js'
 // const processFile = require("./middleware/upload");
@@ -113,6 +114,7 @@ app.use((err, req, res, next) => {
 })
 app.use('/api/auth',userRoute)
 app.use('/api/hosting',hostingRoute)
+app.use('/api/booking',bookingRoute)
 
 app.listen(PORT, () => {
   console.log(`server starting at port http://localhost:${PORT}`)

@@ -36,12 +36,24 @@ function Roomselector({host}) {
     let navigate=useNavigate()
     let location=useLocation()
     let params=location.pathname.split('/')[2];
+    //   const [totalbed, setTotalbed] = useState({})
     const handlenext=async()=>{
         let obj=status;
         obj['4']=true;
         console.log(obj)
+        let obj1={}
+       let arr= Alltotal.map((e)=>{
+     
+
+        obj1[`${e?.nobpd}`]=(e?.nobpd*e?.nod);
+      
+           return obj
+        })
+        console.log(arr,obj1)
+        if(bathrooms>0 && toilets>0 && Alltotal[0].nobpd>0 && Alltotal[0].nod>0){
+       
         try {
-            const updaterooms=await axios.put(`${host}/api/hosting/updateHosting/${params}`,{rooms:Alltotal,toilets:toilets,bathrooms:bathrooms,status:obj},{
+            const updaterooms=await axios.put(`${host}/api/hosting/updateHosting/${params}`,{rooms:Alltotal,toilets:toilets,bathrooms:bathrooms,status:obj,totalbed:obj1},{
                 headers:{
                     "auth-token":Cookies.get('dorm--7z2__PMRW')
                 }
@@ -51,7 +63,10 @@ function Roomselector({host}) {
         } catch (error) {
             console.log(error)
         }
-    
+        }
+        else{
+            alert("Number of bathroom,toilets or rooms cannot be 0")
+        }
     }
   
     // const [Noofbedpd, setNoofbedpd] = useState(0)

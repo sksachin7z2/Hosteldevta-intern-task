@@ -8,11 +8,13 @@ function Addammeneties({host}) {
     let arr=['wifi','TV','washingmachine','studyplace','airconditioning','bathrooms','mess','toilets','water','gym','playarea','unisex','kitchen']
     const [status, setStatus] = useState({'1':false,'2':false,'3':false,'4':false,'5':false,'6':false,'7':false})
 const handlestate=(id)=>{
+
     // if(id===0){
     //     setAmmeneties({...ammeneties,['wifi']:!ammeneties.wifi})
     // }
     // else if(id===1)
     // setAmmeneties({...ammeneties,['TV']:!ammeneties.})
+
     setAmmeneties({...ammeneties,[arr[id]]:!ammeneties[arr[id]]})
  
 }
@@ -40,7 +42,15 @@ const getroomdata=async()=>{
     const handlenext=async()=>{
         let obj=status;
         obj['1']=true;
-        console.log(obj)
+let s=false;
+        for(var i in ammeneties){
+            if(ammeneties[i]===true)
+            {
+                s=true
+            }
+        }
+        console.log(s)        
+        if(s){
         try {
             const updateammeneties=await axios.put(`${host}/api/hosting/updateHosting/${params}`,{ammeneties:ammeneties,status:obj},{
                 headers:{
@@ -52,6 +62,10 @@ const getroomdata=async()=>{
         } catch (error) {
             console.log(error)
         }
+    }
+    else{
+        alert('select at least one ammenety')
+    }
     
     }
   return (
