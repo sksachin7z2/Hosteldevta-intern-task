@@ -2,9 +2,11 @@ import React,{useState,useEffect,useRef} from 'react'
 import { useNavigate,useLocation} from 'react-router-dom'
 import axios from 'axios'
 import Cookies from 'js-cookie'
+import { getAdditionalUserInfo } from 'firebase/auth'
 function Hosting({host}) {
     let navigate=useNavigate()
-   
+   const [guestModal, setGuestModal] = useState(false)
+   const guestref=useRef()
     const [user, setUser] = useState("")
     const [Allhosting, setAllhosting] = useState([])
     const [pending, setPending] = useState([])
@@ -63,7 +65,7 @@ function Hosting({host}) {
                 headers:{"auth-token":Cookies.get('dorm--7z2__PMRW')}
             })
             const data=fetch.data.user;
-                setUser(data.name)
+                setUser(data)
         } catch (error) {
             console.log(error)
         }
@@ -91,7 +93,9 @@ function Hosting({host}) {
               let book= arr4.map(async(e)=>{
                 
                 try {
-                    const fetch=await axios.get(`${host}/api/booking/fetchallBookingHost/${e.id}`)
+                    const fetch=await axios.post(`${host}/api/booking/fetchallBookingHost/${e.id}`,{},{
+                        headers:{"auth-token":Cookies.get('dorm--7z2__PMRW')}
+                    })
                     const data=fetch.data;
                   
                     let arr2=data.allhost.map((fe)=>{
@@ -147,6 +151,17 @@ for (let row of getbook) for (let e of row) arr.push(e);
     const [rooms, setRooms] = useState([])
 const [booking, setbooking] = useState({})
 const [details, setDetails] = useState({})
+const [userinfo, setUserinfo] = useState({name:"",contact:"",upi:"",pan:""})
+const setguestall=async(e)=>{
+    let obj={
+        name:e.name,
+        contact:e.contact,
+        upi:e.paymentUpi,
+        pan:e.pan,
+    }
+  setUserinfo(obj)
+  setGuestModal(true)
+}
 const setall=(e)=>{
     let arr=bookings;
     let a=arr.find(f=>{return f.id===e.id})
@@ -240,9 +255,52 @@ const setall=(e)=>{
 
 
 }
+     <button onClick={()=>setGuestModal(true)} ref={guestref}  class="hidden text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center " type="button">
+  Toggle modal
+</button>
+
+{guestModal&&<div  tabindex="-1"  class="backdrop-blur-md flex justify-center items-center  fixed top-0 left-0 right-0 z-50  w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative w-full max-w-2xl max-h-full">
+       
+        <div class="relative bg-white rounded-lg shadow ">
+        
+            <div class="flex items-start justify-between p-4 border-b rounded-t ">
+                <h3 class="text-xl font-semibold text-gray-900">
+                   Guest Info
+                </h3>
+                <button onClick={()=>setGuestModal(false)} type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center " data-modal-hide="defaultModal">
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+        
+            <div class="p-6 space-y-6">
+            <div >
+            <div className=' w-full right-2 p-5 rounded bg-white '>
+                   <div className='text-[#3f3d56] text-[1.2rem] font-semibold my-1'>Name</div>
+                   <div>{userinfo.name}</div>
+                   <div className='text-[#3f3d56] text-[1.2rem] font-semibold my-1'>Pan card</div>
+                   <div>{userinfo.pan}</div>
+                   <div className='text-[#3f3d56] text-[1.2rem] font-semibold my-1'>Contact</div>
+                   <div>{(userinfo.contact)?(userinfo.contact):"Not Available"}</div>
+                   <div className='text-[#3f3d56] text-[1.2rem] font-semibold my-1'>UPI Id</div>
+                   <div>{userinfo.upi}</div>
+                </div>    
+            </div>
+          
+     </div>
+        </div>
+    </div>
+</div>
+
+
+
+}
     <div className='mt-[15vh] '>
             <div className='w-[90vw] m-auto'>
-                <div className='text-[2rem] text-[#3F3D56] font-semibold'>Welcome {user}!</div>
+                <div className='text-[2rem] text-[#3F3D56] font-semibold'>Welcome {user?.name}!</div>
                 <div className='my-5'>
                     <div onClick={getroomdata}></div>
 
@@ -300,10 +358,10 @@ const setall=(e)=>{
                        
                 </div>
                 <div className='px-5 py-3 mt-6  bg-[#3F3D560F] '>
-                    <div className="grid grid-cols-8 text-center text-[#3f3d56] text-md     font-semibold">
+                    <div className="grid grid-cols-9 text-center text-[#3f3d56] text-md     font-semibold">
                     <div className='overflow-x-scroll'>Hosting_Id</div>
                      <div className='overflow-x-scroll'>Dormitory_title</div>
-                     <div className='overflow-x-scroll'>Guest_Id</div>
+                     <div className='overflow-x-scroll'>Guest Name</div>
                      <div className='overflow-x-scroll'>Room info</div>
                      <div  className='overflow-x-scroll'>
                         Checked_in_on
@@ -315,6 +373,7 @@ const setall=(e)=>{
                         Booked_On
                         </div>
                         <div className='overflow-x-scroll'>Stay</div>
+                        <div className='overflow-x-scroll'>payment_status</div>
                        
                         
                         </div>
@@ -324,7 +383,7 @@ const setall=(e)=>{
                         
                    
                     
-                <div className='grid grid-cols-8 text-center gap-3 '>
+                <div className='grid grid-cols-9 text-center gap-3 '>
                     <div>
                         
                         <div>
@@ -360,8 +419,8 @@ const setall=(e)=>{
                             {
                                 bookings.map((e)=>{
                                     return (
-                                        <div className='overflow-x-scroll'>
-                                            {e.user}
+                                        <div onClick={()=>setguestall(e)} className='overflow-x-scroll'>
+                                            {e.name.split(' ').join("_").split('-').join('_')}
                                         </div>
                                     )
                                 })
@@ -437,6 +496,22 @@ const setall=(e)=>{
                                     return (
                                         <div className='overflow-x-scroll'>
                                             {(new Date(e.checkout) - new Date(e.checkin)) / (1000 * 60 * 60 * 24)}
+                                        </div>
+                                    )
+                                })
+                            }
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                     
+                      <div>
+                      <div>
+                            {
+                                bookings.map((e)=>{
+                                    return (
+                                        <div className='overflow-x-scroll'>
+                                           {e.ispaid?"Done":"Pending"}
                                         </div>
                                     )
                                 })

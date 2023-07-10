@@ -23,9 +23,14 @@ router.post("/fetchallBookingUser",fetchuser, async (req, res) => {
   }
 
 });
-router.get("/fetchallBookingHost/:id", async (req, res) => {
+router.post("/fetchallBookingHost/:id",fetchuser, async (req, res) => {
   try {
-    
+    const docRef = doc(db, "hosting", req.params.id);
+    const docSnap = await getDoc(docRef);
+    console.log(docSnap.data().user.toString() ,req.user.id)
+    if (docSnap.data().user.toString() !== req.user.id) {
+      return res.status(401).send("not authorised");
+    }
     let q = query(collection(db, "booking"), where("hostId", "==", req.params.id));
     const hosting = await getDocs(q);
     let arr1=hosting.docs.map((e)=>{
@@ -71,10 +76,10 @@ router.post(
   async (req, res) => {
     try {
       console.log(req.params.id)
-      const {checkin,checkout,adults,children,infants,bookedon,price,totalbedorrooms,comments,reviews,bed,room,rd,pan,phone} = req.body;
+      const {checkin,checkout,adults,children,infants,bookedon,price,totalbedorrooms,comments,reviews,bed,room,rd,pan,phone,name,ispaid,minimumDown,paymentUpi,orderId,txnToken} = req.body;
       const hostId=req.params.id;
      const booking=await addDoc(collection(db,"booking"),{
-      checkin,checkout,adults,children,infants,rd,bookedon,bed,room,price,totalbedorrooms,comments,reviews,pan,phone,user:req.user.id,hostId:hostId
+      checkin,checkout,adults,children,infants,rd,bookedon,bed,orderId,txnToken,room,price,totalbedorrooms,comments,reviews,pan,phone,name,ispaid,minimumDown,paymentUpi,user:req.user.id,hostId:hostId
      })
 
       res.json({bookId:booking.id});
@@ -87,7 +92,7 @@ router.post(
 );
 
 router.put("/updateBooking/:id",fetchuser, async (req, res) => {
-  const {checkin,checkout,adults,children,infants,bookedon,price,totalbedorrooms,comments,reviews,bed,room,rd,pan,phone} = req.body;
+  const {checkin,checkout,adults,children,infants,bookedon,price,totalbedorrooms,comments,reviews,bed,room,rd,pan,phone,name,ispaid,minimumDown,paymentUpi,orderId,txnToken} = req.body;
     try {
    
       const bookId=req.params.id
@@ -101,7 +106,17 @@ router.put("/updateBooking/:id",fetchuser, async (req, res) => {
           return res.status(401).send("not authorised");
         }
         const host=docSnap.data()
-        const updatedbooking=await updateDoc(docRef,{checkin:checkin?checkin:host.checkin,checkout:checkout?checkout:host.checkout,comments:comments?comments:host.comments,reviews:reviews?reviews:host.reviews,price:price?price:host.price,bookedon:bookedon?bookedon:host.bookedon,infants:infants?infants:host.infants,adults:adults?adults:host.adults,children:children?children:host.children,bed:bed?bed:host.bed,room:room?room:host.room,totalbedorrooms:totalbedorrooms?totalbedorrooms:host.totalbedorrooms,rd:rd?rd:host.rd,pan:pan?pan:host.pan,phone:phone?phone:host.phone});
+        const updatedbooking=await updateDoc(docRef,{checkin:checkin?checkin:host.checkin,checkout:checkout?checkout:host.checkout,comments:comments?comments:host.comments,reviews:reviews?reviews:host.reviews,price:price?price:host.price,bookedon:bookedon?bookedon:host.bookedon,infants:infants?infants:host.infants,adults:adults?adults:host.adults,children:children?children:host.children,bed:bed?bed:host.bed,room:room?room:host.room,totalbedorrooms:totalbedorrooms?totalbedorrooms:host.totalbedorrooms,rd:rd?rd:host.rd,pan:pan?pan:host.pan,phone:phone?phone:host.phone,
+        
+          orderId:orderId?orderId:host.orderId,
+          txnToken:txnToken?txnToken:host.txnToken,
+          name:name?name:host.name,
+          ispaid:ispaid?ispaid:host.ispaid,
+          minimumDown:minimumDown?minimumDown:host.minimumDown,
+          paymentUpi:paymentUpi?paymentUpi:host.paymentUpi
+        
+        
+        });
         res.json({status:"Hosting info Updated",updatedinfo:updatedbooking})
     } catch (error) {
         console.error(error);

@@ -150,7 +150,10 @@ console.log(arr4)
     })
     let ans=await Promise.all(arr2)
 console.log(ans)
-
+if(document.getElementById('stay').value===""){
+setFilter(listings)
+return
+}
 let arr=listings.filter((e,i)=>((e.address.country===address.country) && (e.address.administrative_area_level_1===address.administrative_area_level_1)&&(e.address.locality===address.locality)&&(ans[i]>=room)))
 console.log(arr,address.country)
 
@@ -171,7 +174,7 @@ console.log(arr,address.country)
             <div>
               <div>
                 <div class="relative">
-                  <input  ref={ref}  type="text" id="stay" class="block rounded-t-lg px-2.5 pb-2.5 pt-5 w-full text-sm text-gray-900 bg-gray-50  border-0 border-b-2 border-gray-300 " placeholder=" " />
+                  <input   ref={ref}  type="text" id="stay" class="block rounded-t-lg px-2.5 pb-2.5 pt-5 w-full text-sm text-gray-900 bg-gray-50  border-0 border-b-2 border-gray-300 " placeholder=" " />
                   <label for="stay" class="absolute text-sm text-gray-500  duration-300 transform -translate-y-4 scale-75 top-4 ">Where are you Staying ?</label>
                 </div>
               </div>

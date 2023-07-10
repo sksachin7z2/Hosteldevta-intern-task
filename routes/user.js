@@ -145,7 +145,7 @@ router.post('/getuser', fillter, async (req, res) => {
     }
     let user = docSnap.data();
     delete user.password;
-    res.json({ status: "user found", user })
+    res.json({ status: "user found", user,userId:docSnap.id })
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Internal Server Error Occured")

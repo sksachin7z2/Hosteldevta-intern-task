@@ -48,6 +48,9 @@ router.post("/fetchHosting/:id",fetchuser, async (req, res) => {
     const hostId=req.params.id
       const docRef = doc(db, "hosting", hostId);
       const docSnap = await getDoc(docRef);
+      // if (docSnap.data().user.toString() !== req.user.id) {
+      //   return res.status(401).send("not authorised");
+      // }
       if (!docSnap.exists()) {
         return res.status(404).send("Not found");
       }

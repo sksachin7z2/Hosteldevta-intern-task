@@ -8,6 +8,24 @@ import Cookies from 'js-cookie'
 import { useUserAuth } from "../../context/auth";
 
 function Payment({host}) {
+    const [userId, setUserId] = useState("")
+    const getuserid=async()=>{
+        try {
+            const fetch=await axios.post(`${host}/api/auth/getuser`,{},{
+                headers:{
+                    "auth-token":Cookies.get('dorm--7z2__PMRW')
+                }
+               })
+               const data=fetch.data;
+               console.log(data.userId)
+               setUserId(data.userId)
+            
+        } catch (error) {
+            console.log(error)
+        }
+      
+
+    }
     let navigate=useNavigate()
     let location=useLocation()
    const [rooms, setRooms] = useState([])
@@ -43,7 +61,7 @@ function Payment({host}) {
       
       }
       let bookId=location.pathname.split('/')[3]
-      const [bookingdetails, setBookingdetails] = useState({})
+      const [paymentUpi, setPaymentUpi] = useState("")
     const getBooking=async()=>{
         try {
             const fetch=await axios.post(`${host}/api/booking/fetchBooking/${bookId}`,{},{
@@ -54,7 +72,7 @@ function Payment({host}) {
             setBooking(data?.host)
             setPancard(data?.host?.pan)
             setPhone(data?.host?.phone)
-
+            setPaymentUpi(data?.host?.paymentUpi)
 
         } catch (error) {
             console.log(error)
@@ -62,23 +80,151 @@ function Payment({host}) {
       
       }
       const [pancard, setPancard] = useState("")
+      const [transactionmodal, setTransactionmodal] = useState(false)
       const [phone, setPhone] = useState("")
       const handleconfirmandpay=async()=>{
-        if (!pancard || !phone)
+        if (!pancard || !phone ||!paymentUpi)
         {
-            alert('both pan card and phone are required')
+            alert('pan card, Upi,  and phone are required')
             return
         }
-
+        if(booking.ispaid){
+            alert('you have already paid and booked')
+            return
+        }
+        // bookedon:new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), new Date().getHours(), new Date().getMinutes(), 0, 0)
         try {
-            const fetch=await axios.put(`${host}/api/booking/updateBooking/${bookId}`,{pan:pancard,phone:phone,bookedon:new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), new Date().getHours(), new Date().getMinutes(), 0, 0)},{
+            const fetc=await axios.put(`${host}/api/booking/updateBooking/${bookId}`,{pan:pancard,phone:phone,paymentUpi:paymentUpi},{
                 headers:{
                     "auth-token":Cookies.get("dorm--7z2__PMRW")
                 }
             })
-            const data=fetch.data;
+            const data=fetc.data;
             console.log(data)
-            // navigate(`/dashboard`)
+            // makePayment()
+           
+           
+            const initiate=await axios.post("https://paypis.hosteldevta.com/initiate",{
+                "_id": userId,
+                "callbackUrl": "https://hosteldevta.com",
+                "amount": "1"
+            },{
+                headers:{
+                            'Accept': 'application/json',
+                           'Content-Type': 'application/json'
+                        }
+            })
+            const init=initiate.data
+            console.log(init)
+            const validate=await axios.post("https://paypis.hosteldevta.com/validateUPI",{
+                
+                    "orderId": init.data.orderId,
+                    "txnToken": init.data.txnToken,
+                    "payerAccount": paymentUpi,
+                    "amount": "1"
+                    
+            },{
+                headers:{
+                            'Accept': 'application/json',
+                           'Content-Type': 'application/json'
+                        }
+            })
+            const f=validate.data
+            console.log(f)
+            if(f.resultInfo.resultStatus==='S')
+            {
+
+            const process=await axios.post("https://paypis.hosteldevta.com/processTransaction",{
+                
+                    "orderId": init.data.orderId,
+                    "txnToken": init.data.txnToken,
+                    "payerAccount": paymentUpi,
+                    "amount": "1"
+                    
+            },{
+                headers:{
+                            'Accept': 'application/json',
+                           'Content-Type': 'application/json'
+                        }
+            })
+            const fo=process.data
+            console.log(fo)
+            setTimeout(()=>{
+                clearInterval(checkstatus)
+                setTransactionmodal(false)
+                navigate(`/paymentstatus/${params}/${bookId}`)
+                return
+            },125000)//2 minutes timeout
+         
+         let  myInterval = setInterval(() => {
+               
+                if (parseInt(document.getElementById('seconds').innerText) > 0) {
+                    document.getElementById('seconds').innerText=parseInt(document.getElementById('seconds').innerText)-1
+                }
+                else if (parseInt(document.getElementById('seconds').innerText) === 0) {
+                    if (parseInt(document.getElementById('minutes').innerText) === 0) {
+                        clearInterval(myInterval)
+                        setTransactionmodal(false)
+                    } else {
+                       document.getElementById('seconds').innerText=59
+                       document.getElementById('minutes').innerText=parseInt(document.getElementById('minutes').innerText)-1
+                    }
+                } 
+            }, 1000)
+
+
+
+            setTransactionmodal(true)
+           const checkstatus= setInterval(async function () {
+                const status=await axios.post("https://paypis.hosteldevta.com/paymentStatus",{
+                
+                    "orderId": init.data.orderId,
+                    "txnToken": init.data.txnToken,
+                    "payerAccount": paymentUpi,
+                    "amount": "1"
+                    
+            },{
+                headers:{
+                            'Accept': 'application/json',
+                           'Content-Type': 'application/json'
+                        }
+            })
+            const fo=status.data
+            console.log(fo)
+            if(fo.resultInfo.resultStatus==='TXN_SUCCESS')
+            {
+                clearInterval(checkstatus)
+                setTransactionmodal(false)
+                clearInterval(myInterval)
+                try {
+                    const fetch=await axios.put(`${host}/api/booking/updateBooking/${bookId}`,{bookedon:new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), new Date().getHours(), new Date().getMinutes(), 0, 0),ispaid:true,orderId:init.data.orderId,txnToken:init.data.txnToken},{
+                        headers:{
+                            "auth-token":Cookies.get("dorm--7z2__PMRW")
+                        }
+                    })
+                    const data=fetch.data;
+                    console.log(data)
+                   
+                    
+                } catch (error) {
+                    console.log(error)
+                    alert(error)
+                }
+               
+                navigate(`/paymentstatus/${params}/${bookId}`)
+                return
+            }
+            
+
+
+            }, 7000);
+            }
+            else{
+                alert("upi is not valid")
+            }
+
+          
+           
             
         } catch (error) {
             console.log(error)
@@ -88,13 +234,137 @@ function Payment({host}) {
       useEffect(() => {
        getroomdata();
         getBooking()
+        getuserid();
     console.log((booking))
       }, [])
-      const {booking,setBooking}=useUserAuth()
+// const [timer, setTimer] = useState({minutes:2,seconds:0})
+
+
+      function isDate(val) {
+        // Cross realm comptatible
+        return Object.prototype.toString.call(val) === '[object Date]'
+      }
+      
+      function isObj(val) {
+        return typeof val === 'object'
+      }
+      
+       function stringifyValue(val) {
+        if (isObj(val) && !isDate(val)) {
+          return JSON.stringify(val)
+        } else {
+          return val
+        }
+      }
+      
+      function buildForm({ action, params }) {
+        const form = document.createElement('form')
+        form.setAttribute('method', 'post')
+        form.setAttribute('action', action)
+      
+        Object.keys(params).forEach(key => {
+          const input = document.createElement('input')
+          input.setAttribute('type', 'hidden')
+          input.setAttribute('name', key)
+          input.setAttribute('value', stringifyValue(params[key]))
+          form.appendChild(input)
+        })
+      
+        return form
+      }
+      
+       function post(details) {
+        const form = buildForm(details)
+        document.body.appendChild(form)
+        form.submit()
+        form.remove()
+      }
+    
+  const getDat=(data)=>
+  {
+
+    return fetch(`http://localhost:5000/api/payment`,{
+        method:"POST",
+        headers:{
+            Accept:"application/json",
+            "Content-Type":"application/json"
+        },
+        body:JSON.stringify(data)
+    }).then(response=>response.json()).catch(err=>console.log(err))
+  }
+
+
+
+    const makePayment=()=>
+    {
+getDat({amount:500,email:'abc@gmail.com'}).then(response=>{
+ 
+    var information={
+        action:"https://securegw-stage.paytm.in/order/process",
+        params:response
+    }
+  post(information)
+
+})
+    }
+
+
+      const {booking,setBooking,paymentStatus,setPaymentStatus}=useUserAuth()
       const BookingCard = useMemo(()=>React.lazy(() => import('../../components/BookingCard')),[]) 
       const Dorminfo = useMemo(()=>React.lazy(() => import('../../components/Dorminfo')),[]) 
-     
+     const transactionref=useRef()
   return (
+    <>
+     {/* {<button onClick={()=>setTransactionmodal(true)} ref={transactionref}  class="hidden text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center " type="button">
+  Toggle modal
+</button>} */}
+
+{transactionmodal &&<div  tabindex="-1"  class="backdrop-blur-md flex justify-center items-center  fixed top-0 left-0 right-0 z-50  w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative w-full max-w-2xl max-h-full">
+       
+        <div class="relative bg-white rounded-lg shadow ">
+        
+            <div class="flex items-start justify-between p-4 border-b rounded-t ">
+                <h3 class="text-xl font-semibold text-gray-900">
+                   Transaction pending
+                </h3>
+             {/* {   <button onClick={()=>setTransactionmodal(false)} type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center " data-modal-hide="defaultModal">
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>} */}
+            </div>
+        
+            <div class="p-6 space-y-6">
+            <div >
+
+            <svg aria-hidden="true" class="w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
+        <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
+    </svg>
+        <div>
+            <div className='flex gap-2 items-center'>
+                    <div id='minutes'>
+                        2
+                    </div>
+                    <div>:</div>
+                    <div id='seconds'>
+                            0
+                    </div>
+            </div>
+        </div>
+        <div>
+        <button onClick={()=>{setTransactionmodal(false);window.location.reload()}} type="button" className="text-white bg-[#3f3d56]  focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center mr-3 md:mr-0 ">Cancel transaction</button>
+        </div>
+
+                                        </div>
+            </div>
+          
+     
+        </div>
+    </div>
+</div>}
     <div className='mt-[15vh] w-[90vw] m-auto'>
         <div className='grid md:grid-cols-[50%_50%] grid-rows-1 gap-7'>
         <div>
@@ -123,9 +393,9 @@ function Payment({host}) {
 <Dorminfo booking={booking} rooms={rooms}/>
 </Suspense>
 <div>
-{/* <div>
+<div>
     <div className='grid grid-cols-2'>
-        <div>
+        <div className='text-[#3f3d56] text-[1.5rem] font-semibold'>
         Payment Information
         </div>
         <div className='flex gap-2 items-center'>
@@ -154,19 +424,24 @@ function Payment({host}) {
 
         </div>
     </div>
-    <div></div>
-</div> */}
+    <div>
+    <div className='my-2'>
+            <label for="upi" class="block mb-2 text-sm font-medium text-gray-900 ">UPI Id</label>
+            <input value={paymentUpi} onChange={(e)=>setPaymentUpi(e.target.value)} type="text" id="upi" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[70%] p-2.5 " placeholder="UPI" required/>
+        </div>
+    </div>
+</div>
 <div>
     <div className='text-[#3f3d56] font-semibold text-[1.5rem] my-6'>
         Information required for stay
     </div>
     <div>
     <div className="relative my-5">
-                                    <input value={pancard}  onChange={(e)=>{setPancard(e.target.value)}} className='block rounded-t-lg px-2.5 pb-2.5 pt-5 w-[50%] text-sm text-gray-900 bg-gray-50  border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer' type="text" name="" id="" placeholder=''/>
+                                    <input value={pancard}  onChange={(e)=>{setPancard(e.target.value)}} className='block rounded-t-lg px-2.5 pb-2.5 pt-5 w-[70%] text-sm text-gray-900 bg-gray-50  border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer' type="text" name="" id="" placeholder=''/>
                                     <label  className="absolute text-sm text-gray-500  duration-300 transform -translate-y-4 scale-75 top-4  ">Permanent Account Number</label>
                                     </div>
     <div className="relative my-5">
-                                    <input value={phone}  onChange={(e)=>{setPhone(e.target.value)}} className='block rounded-t-lg px-2.5 pb-2.5 pt-5 w-[50%] text-sm text-gray-900 bg-gray-50  border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer' type="number" name="" id="" placeholder=''/>
+                                    <input value={phone}  onChange={(e)=>{setPhone(e.target.value)}} className='block rounded-t-lg px-2.5 pb-2.5 pt-5 w-[70%] text-sm text-gray-900 bg-gray-50  border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer' type="number" name="" id="" placeholder=''/>
                                     <label  className="absolute text-sm text-gray-500  duration-300 transform -translate-y-4 scale-75 top-4  ">Contact Number</label>
                                     </div>
     </div>
@@ -200,6 +475,7 @@ function Payment({host}) {
         </div>
 
     </div>
+    </>
   )
 }
 

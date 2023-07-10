@@ -17,6 +17,9 @@ const [account, setAccount] = useState(false)
 try {
   await signOut(auth)
   Cookies.remove('dorm--7z2__PMRW')
+  Cookies.remove('name')
+  Cookies.remove('dp')
+  Cookies.remove('email')
 } catch (error) {
   alert(error)
 }

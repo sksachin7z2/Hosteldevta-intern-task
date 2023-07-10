@@ -335,10 +335,16 @@ setMaxRoom(arr1)
             comments:[],
             bookedon:"",
             bed:bed,
+            name:Cookies.get('name'),
+            ispaid:false,
+            minimumDown:totalprice,
+            paymentUpi:"",
             room:room,
             rd:rd,
             pan:"",
-            phone:""
+            phone:"",
+            orderId:"",
+            txnToken:"",
          
         }
         
@@ -414,11 +420,17 @@ setMaxRoom(arr1)
             reviews:[],
             comments:[],
             bookedon:"",
+             name:Cookies.get('name'),
+             ispaid:false,
+             minimumDown:totalprice,
+             paymentUpi:"",
             bed:bed,
             room:room,
             rd:rd,
             pan:"",
-            phone:""
+            phone:"",
+            orderId:"",
+            txnToken:"",
          
         }
         

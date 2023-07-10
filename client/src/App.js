@@ -26,10 +26,15 @@ import Setprice from './pages/Step3setprice';
 import ReviewListing from './pages/ReviewListing';
 import UserDashboard from './pages/userDashboard/UserDashboard';
 import HostingLast from './pages/HostingLast'
+import Profile from './pages/Profile'
 import Listings from './pages/Listing'
 import Details from './pages/userDashboard/Details'
 import SecurityContact from './pages/Contactsecurity'
 import Payment from './pages/userDashboard/Payment';
+import PaymentStatus from './pages/userDashboard/PaymentStatus'
+import Info from './pages/Info';
+import Security from './pages/Security';
+import PayoutsandBookings from './pages/PayoutsandBookings';
 function App(props) {
   const host="http://localhost:5000"
   const [lat, setLat] = useState(0)
@@ -55,6 +60,7 @@ useEffect(() => {
         <Route exact path='/dashboard' element= {<UserDashboard host={host}/>}/>
         <Route exact path='/detail/:id' element= {<Details host={host}/>}/>
         <Route exact path='/payment/:id/:bid' element= {<Payment host={host}/>}/>
+        <Route exact path='/paymentstatus/:id/:bid' element= {<PaymentStatus host={host}/>}/>
 
 
         <Route exact path='/getlocationok' element={ <Getyourlocation host={host} lat={lat} lon ={lon} setLon={setLon} setLat={setLat} getlocation={getlocation}/> }  />
@@ -75,7 +81,10 @@ useEffect(() => {
         <Route exact path='/hosting/:id/review-listing' element={ <ReviewListing host={host}/> }  />
         <Route exact path='/hosting/:id/congratulation' element={ <HostingLast host={host}/> }  />
 
-        <Route exact path='/profile' element={ <HostingLast host={host}/> }  />
+        <Route exact path='/profile' element={ <Profile host={host}/> }  />
+        <Route exact path='/info' element={ <Info host={host}/> }  />
+        <Route exact path='/security' element={ <Security host={host}/> }  />
+        <Route exact path='/payoutandbookings' element={ <PayoutsandBookings host={host}/> }  />
         <Route exact path='/listings' element={ <Listings host={host}/> }  />
 
 
