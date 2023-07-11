@@ -155,7 +155,7 @@ const [userinfo, setUserinfo] = useState({name:"",contact:"",upi:"",pan:""})
 const setguestall=async(e)=>{
     let obj={
         name:e.name,
-        contact:e.contact,
+        contact:e.phone,
         upi:e.paymentUpi,
         pan:e.pan,
     }

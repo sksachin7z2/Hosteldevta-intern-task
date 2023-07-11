@@ -34,7 +34,7 @@ const Signup = () => {
        Cookies.set('name',name)
     
           const url="http://localhost:5000/api/auth";
-       const resp=await axios.post(`${url}/login1`,{email:credential.email,password:credential.password})
+       const resp=await axios.post(`${url}/login1`,{email:credential.email})
   const res=resp.data
   if(!res.authToken)
   alert("wrong credentials")
@@ -63,7 +63,7 @@ const Signup = () => {
           Cookies.set('name',name)
         
          const url="http://localhost:5000/api/auth"
-          const user=await axios.post(`${url}/createUser1`,{email:email,name:name});
+          const user=await axios.post(`${url}/createUser1`,{email:email,name:name,address:"",contact:"",dob:"",nationality:"",pan:"",gender:""});
           const res=user.data;
           console.log(res)
           if(!res.authToken)

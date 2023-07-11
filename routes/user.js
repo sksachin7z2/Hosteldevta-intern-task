@@ -59,8 +59,13 @@ router.post('/createUser1', async (req, res) => {
 
     let nuser = await addDoc(collection(db, "users"), {
       name: req.body.name,
-      contact: req.body.contact?req.body.contact:null,
-      email: req.body.email
+      contact: req.body.contact,
+      email: req.body.email,
+      address:req.body.address,
+      dob:req.body.dob,
+      nationality:req.body.nationality,
+      pan:req.body.pan,
+      gender:req.body.gender
     });
     console.log('ok2')
     const data = {
@@ -171,7 +176,7 @@ router.delete("/deleteuser", fillter, async (req, res) => {
 });
 
 router.put('/updateuser', fillter, async (req, res) => {
-  const { email, password, name,contact } = req.body;
+  const { email, name,contact,address,dob,nationality,pan,gender } = req.body;
   const userId = req.user.id
   try {
 
@@ -179,14 +184,13 @@ router.put('/updateuser', fillter, async (req, res) => {
     const docSnap = await getDoc(docRef);
 
     if (!docSnap.exists()) {
-      return res.status(404).json({ status: "Unauthorized" });
+      return res.status(404).json({ status: "Not found" });
     }
     let user=docSnap.data()
-    const salt = await bcrypt.genSalt(10);
-    const secPass = await bcrypt.hash(req.body.password ? req.body.password : "", salt)
 
-    await updateDoc(docRef, { email: email ? email : user.email, password: password ? secPass : user.password, name: name ? name : user.name ,contact: contact ? contact : user.contact});
-    let updateduser={ email: email ? email : user.email, password: password ? secPass : user.password, name: name ? name : user.name ,contact: contact ? contact : user.contact}
+    let updateduser={ email: email ? email : user.email, name: name ? name : user.name ,contact: contact ? contact : user.contact, address:address?address:user.address,gender:gender?gender:user.gender ,pan:pan?pan:user.pan,dob:dob?dob:user.dob,nationality:nationality?nationality:user.nationality}
+    await updateDoc(docRef, { ...updateduser});
+    
     
     res.json({ status: "User info Updated", updatedinfo: updateduser })
   } catch (error) {
