@@ -52,7 +52,7 @@ function Booking({host}) {
                 <div className='text-[#3f3d56] text-[1.2rem] font-semibold'>Booking Status</div>
                 <div>
                 {
-                    (booking?.orderId)!==""? <div > <div className='text-green-600 font-semibold text-[1.5rem] text-center my-2'> Transaction Succesfull</div>
+                    (booking?.ispaid)===true? <div > <div className='text-green-600 font-semibold text-[1.5rem] text-center my-2'> Transaction Succesfull</div>
                     <div className='space-y-2'>
                     <div className='text-[#3f3d56] text-lg font-semibold'>OrderId</div>
                     <div>{booking?.orderId}</div>

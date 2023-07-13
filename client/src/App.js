@@ -35,6 +35,10 @@ import PaymentStatus from './pages/userDashboard/PaymentStatus'
 import Info from './pages/Info';
 import Security from './pages/Security';
 import PayoutsandBookings from './pages/PayoutsandBookings';
+import Bookings from './pages/Bookings';
+import Payouts from './pages/Payouts';
+import UserTransaction from './pages/UserTransaction';
+import ResetPassword from './pages/ResetPassword';
 function App(props) {
   const host="http://localhost:5000"
   const [lat, setLat] = useState(0)
@@ -83,9 +87,13 @@ useEffect(() => {
 
         <Route exact path='/profile' element={ <Profile host={host}/> }  />
         <Route exact path='/info' element={ <Info host={host}/> }  />
-        <Route exact path='/security' element={ <Security host={host}/> }  />
-        <Route exact path='/payoutandbookings' element={ <PayoutsandBookings host={host}/> }  />
+        <Route exact path='/profile/security' element={ <Security host={host}/> }  />
+        <Route exact path='/profile/payments' element={ <PayoutsandBookings host={host}/> }  />
         <Route exact path='/listings' element={ <Listings host={host}/> }  />
+        <Route exact path='/bookings' element={ <Bookings host={host}/> }  />
+        <Route exact path='/profile/payments/payout' element={ <Payouts host={host}/> }  />
+        <Route exact path='/profile/payments/managepayments' element={ <UserTransaction host={host}/> }  />
+        <Route exact path='/profile/security/resetpassword' element={ <ResetPassword host={host}/> }  />
 
 
         <Route exact path='/getlocation' element={ <Gethostlocation host={host} google={props.google}

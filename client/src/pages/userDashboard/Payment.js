@@ -92,9 +92,10 @@ function Payment({host}) {
             alert('you have already paid and booked')
             return
         }
+
         // bookedon:new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), new Date().getHours(), new Date().getMinutes(), 0, 0)
         try {
-            const fetc=await axios.put(`${host}/api/booking/updateBooking/${bookId}`,{pan:pancard,phone:phone,paymentUpi:paymentUpi},{
+            const fetc=await axios.put(`${host}/api/booking/updateBooking/${bookId}`,{pan:pancard,phone:phone,paymentUpi:paymentUpi,bookedon:new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), new Date().getHours(), new Date().getMinutes(), 0, 0)},{
                 headers:{
                     "auth-token":Cookies.get("dorm--7z2__PMRW")
                 }
@@ -149,12 +150,28 @@ function Payment({host}) {
             })
             const fo=process.data
             console.log(fo)
-            setTimeout(()=>{
+           let tt= setTimeout(async()=>{
                 clearInterval(checkstatus)
+                clearInterval(myInterval)
                 setTransactionmodal(false)
+                try {
+                    const f=await axios.post(`${host}/api/transaction/addTransaction/${params}/${bookId}`,{
+                        ispaid:false,orderId:init.data.orderId,txnToken:init.data.txnToken,dormtitle:details.title,bookedon:new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), new Date().getHours(), new Date().getMinutes(), 0, 0),paymentUpi:paymentUpi,amount:booking.minimumDown
+    
+                    },{
+                        headers:{
+                            "auth-token":Cookies.get("dorm--7z2__PMRW")
+                        }
+                    })
+                    console.log(f.data)
+                    
+                } catch (error) {
+                    console.log(error)
+                }
+               
                 navigate(`/paymentstatus/${params}/${bookId}`)
                 return
-            },125000)//2 minutes timeout
+            },122000)//2 minutes timeout
          
          let  myInterval = setInterval(() => {
                
@@ -196,6 +213,7 @@ function Payment({host}) {
                 clearInterval(checkstatus)
                 setTransactionmodal(false)
                 clearInterval(myInterval)
+                clearTimeout(tt)
                 try {
                     const fetch=await axios.put(`${host}/api/booking/updateBooking/${bookId}`,{bookedon:new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), new Date().getHours(), new Date().getMinutes(), 0, 0),ispaid:true,orderId:init.data.orderId,txnToken:init.data.txnToken},{
                         headers:{
@@ -204,7 +222,29 @@ function Payment({host}) {
                     })
                     const data=fetch.data;
                     console.log(data)
-                   
+                    // bookedon,dormtitle,ispaid,paymentUpi,orderId,txnToken
+                    const f=await axios.post(`${host}/api/transaction/addTransaction/${params}/${bookId}`,{
+                        ispaid:true,orderId:init.data.orderId,txnToken:init.data.txnToken,dormtitle:details.title,bookedon:new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), new Date().getHours(), new Date().getMinutes(), 0, 0),paymentUpi:paymentUpi,amount:booking.minimumDown
+
+                    },{
+                        headers:{
+                            "auth-token":Cookies.get("dorm--7z2__PMRW")
+                        }
+                    })
+                    console.log(f.data)
+
+
+                    let obj=details.totalbed
+           for(var i in booking.totalbedorrooms){
+                obj[i]=booking.totalbedorrooms[i]['beds']?(obj[i]-booking.totalbedorrooms[i]['beds']):(obj[i]-(booking.totalbedorrooms[i]['rooms']*i))
+           }
+           console.log(obj)
+           const updatehosting=await axios.put(`${host}/api/hosting/updateHosting/${params}`,{totalbed:obj},{
+            headers:{
+                "auth-token":Cookies.get('dorm--7z2__PMRW')
+            }
+        })
+        console.log(updatehosting.data)
                     
                 } catch (error) {
                     console.log(error)

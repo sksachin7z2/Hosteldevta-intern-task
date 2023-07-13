@@ -295,7 +295,7 @@ setMaxRoom(arr1)
         setHelper(!helper)
       }
       const handlebooking=async(e)=>{
-      
+
         let totalbed=0
         console.log(rd)
         let totalprice=0

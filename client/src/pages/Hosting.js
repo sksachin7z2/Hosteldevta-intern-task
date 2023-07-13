@@ -3,6 +3,7 @@ import { useNavigate,useLocation} from 'react-router-dom'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import { getAdditionalUserInfo } from 'firebase/auth'
+import { set } from 'firebase/database'
 function Hosting({host}) {
     let navigate=useNavigate()
    const [guestModal, setGuestModal] = useState(false)
@@ -10,8 +11,10 @@ function Hosting({host}) {
     const [user, setUser] = useState("")
     const [Allhosting, setAllhosting] = useState([])
     const [pending, setPending] = useState([])
+    const [status, setStatus] = useState({upcoming:false,checkin:true,checkout:false,pending:false,confirmed:false})
     const [listing, setListing] = useState([])
     const [hostIds, setHostIds] = useState([])
+    const [filter, setFilter] = useState([])
     const [bookings, setBookings] = useState([])
     const getroomdata=async()=>{
         try {
@@ -112,6 +115,18 @@ function Hosting({host}) {
                let arr=[];
 for (let row of getbook) for (let e of row) arr.push(e);
                console.log(arr)
+               const comparee=(a,b)=>{
+                if ( new Date(a.checkin).getDate() < new Date( b.checkin).getDate() ){
+                    return -1;
+                  }
+                if ( new Date(a.checkin).getDate() > new Date( b.checkin).getDate() ){
+                    return 1;
+                  }
+                  return 0
+               
+               }
+               arr.sort(comparee)
+               setFilter(arr)
                setBookings(arr)
            
         } catch (error) {
@@ -180,6 +195,79 @@ const setall=(e)=>{
 
 }
     const ref=useRef()
+    const filterupcoming=()=>{
+        setStatus({...status,['upcoming']:true})
+        let arr=filter
+        arr=arr.filter(e=>new Date(e?.checkin).getDate()>new Date().getDate())
+        setBookings(arr)
+    }
+    const filterall=()=>{
+        let arr=filter
+        setStatus({...status,['upcoming']:false})
+        setBookings(arr)
+    }
+    const handlecp=(e)=>{
+        if(e.target.value==='confirmed')
+        {
+            setStatus({...status,['confirmed']:true,['pending']:false})
+let arr=filter
+             arr=arr.filter(e=>e?.ispaid===true)
+           
+            if(status.upcoming===true)
+            {
+                arr=arr.filter(e=>new Date(e?.checkin).getDate()>new Date().getDate())
+            }
+            setBookings(arr)
+        }
+        else
+        {
+            setStatus({...status,['confirmed']:false,['pending']:true})
+            let arr=filter
+
+            arr=arr.filter(e=>e?.ispaid===false)
+            if(status.upcoming===true)
+            {
+                arr=arr.filter(e=>new Date(e?.checkin).getDate()>new Date().getDate())
+            }
+            setBookings(arr)
+            setHelper(!helper)
+        }
+    }
+    const handlecheckout=async()=>{
+            let arr=bookings
+            setStatus({...status,['checkout']:true,['checkin']:false})
+            const comparee=(a,b)=>{
+                if ( new Date(a.checkout) < new Date( b.checkout) ){
+                    return -1;
+                  }
+                if ( new Date(a.checkout) > new Date( b.checkout) ){
+                    return 1;
+                  }
+                  return 0
+               
+               }
+          arr.sort(comparee)
+            setBookings(arr)
+            setHelper(!helper)
+    }
+    const [helper, setHelper] = useState(false)
+    const handlecheckin=async()=>{
+        let arr=bookings
+        setStatus({...status,['checkin']:true,['checkout']:false})
+        const comparee=(a,b)=>{
+            if ( new Date(a.checkin) < new Date( b.checkin) ){
+                return -1;
+              }
+            if ( new Date(a.checkin) > new Date( b.checkin) ){
+                return 1;
+              }
+              return 0
+           
+           }
+           arr.sort(comparee)
+        setBookings(arr)
+        setHelper(!helper)
+    }
   return (
     <>
      <button onClick={()=>setModal(true)} ref={ref}  class="hidden text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center " type="button">
@@ -340,19 +428,30 @@ const setall=(e)=>{
                 <div className='text-[1.5rem] text-[#3F3D56] font-semibold mb-3'>Your Reservation</div>
                 <div className='flex gap-3 items-center'>
                     <div>
-                    <button className='rounded-full py-1 px-2 border  border-[#3F3D56] focus:bg-[#3F3D56] focus:text-white'>
+                    <button onClick={handlecheckout} className={`rounded-full py-1 px-2 border  border-[#3F3D56]  ${status.checkout?"bg-[#3f3d56] text-white":""} `}>
                             Checking out
                         </button>
                     </div>
                     <div>
-                    <button className='rounded-full py-1 px-2 border border-[#3F3D56] focus:bg-[#3F3D56] focus:text-white'>
+                    <button onClick={handlecheckin} className={`rounded-full py-1 px-2 border border-[#3F3D56] ${status.checkin?"bg-[#3f3d56] text-white":""} `}>
                             Checking in
                         </button>
                     </div>
                     <div>
-                    <button className='rounded-full py-1 px-2 border border-[#3F3D56] focus:bg-[#3F3D56] focus:text-white'>
+                    <button onClick={filterall} className={`rounded-full py-1 px-2 border border-[#3F3D56] ${!status.upcoming?"bg-[#3f3d56] text-white":""}`}>
+                            All
+                        </button>
+                    </div>
+                    <div>
+                    <button onClick={filterupcoming} className={`rounded-full py-1 px-2 border border-[#3F3D56] ${status.upcoming?"bg-[#3f3d56] text-white":""} `}>
                             Upcoming
                         </button>
+                    </div>
+                    <div>
+                   <select name="cp" id="cp" onChange={handlecp}>
+                    <option value="confirmed">Confirmed</option>
+                    <option value="pending">Pending</option>
+                   </select>
                     </div>
                         
                        
@@ -495,7 +594,7 @@ const setall=(e)=>{
                                 bookings.map((e)=>{
                                     return (
                                         <div className='overflow-x-scroll'>
-                                            {(new Date(e.checkout) - new Date(e.checkin)) / (1000 * 60 * 60 * 24)}
+                                            {(e.ispaid===false)?"Not Booked":((new Date(e.checkout) - new Date(e.checkin)) / (1000 * 60 * 60 * 24))}
                                         </div>
                                     )
                                 })

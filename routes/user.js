@@ -65,7 +65,8 @@ router.post('/createUser1', async (req, res) => {
       dob:req.body.dob,
       nationality:req.body.nationality,
       pan:req.body.pan,
-      gender:req.body.gender
+      gender:req.body.gender,
+      payment:""
     });
     console.log('ok2')
     const data = {
@@ -157,7 +158,7 @@ router.post('/getuser', fillter, async (req, res) => {
   }
 })
 
-router.delete("/deleteuser", fillter, async (req, res) => {
+router.post("/deleteuser", fillter, async (req, res) => {
   const userId = req.user.id;
   try {
 
@@ -165,7 +166,7 @@ router.delete("/deleteuser", fillter, async (req, res) => {
     const docSnap = await getDoc(docRef);
 
     if (!docSnap.exists()) {
-      return res.status(404).send("Unauthorized");
+      return res.send("Unauthorized");
     }
     await deleteDoc(doc(db, "users", userId));
     res.json({ success: "Your account has been deleted", deleteduser: docSnap.data() });
@@ -176,7 +177,7 @@ router.delete("/deleteuser", fillter, async (req, res) => {
 });
 
 router.put('/updateuser', fillter, async (req, res) => {
-  const { email, name,contact,address,dob,nationality,pan,gender } = req.body;
+  const { email, name,contact,address,dob,nationality,pan,gender,payment } = req.body;
   const userId = req.user.id
   try {
 
@@ -188,7 +189,7 @@ router.put('/updateuser', fillter, async (req, res) => {
     }
     let user=docSnap.data()
 
-    let updateduser={ email: email ? email : user.email, name: name ? name : user.name ,contact: contact ? contact : user.contact, address:address?address:user.address,gender:gender?gender:user.gender ,pan:pan?pan:user.pan,dob:dob?dob:user.dob,nationality:nationality?nationality:user.nationality}
+    let updateduser={payment:payment?payment:user.payment, email: email ? email : user.email, name: name ? name : user.name ,contact: contact ? contact : user.contact, address:address?address:user.address,gender:gender?gender:user.gender ,pan:pan?pan:user.pan,dob:dob?dob:user.dob,nationality:nationality?nationality:user.nationality}
     await updateDoc(docRef, { ...updateduser});
     
     

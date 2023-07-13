@@ -124,7 +124,7 @@ router.put("/updateBooking/:id",fetchuser, async (req, res) => {
     }
 });
 
-router.delete("/deleteBooking/:id",fetchuser, async (req, res) => {
+router.post("/deleteBooking/:id",fetchuser, async (req, res) => {
 
   try {
    
@@ -146,25 +146,33 @@ router.delete("/deleteBooking/:id",fetchuser, async (req, res) => {
   }
 });
 
-// router.delete("/deleteallHostings",fetchuser, async (req, res) => {
+router.post("/deleteallbookings",fetchuser, async (req, res) => {
 
-//   try {
+  try {
   
-//     let Hostings = await Hosting.find();
-//     if (!Hostings[0]) {
-//       return res.status(404).send("Not found");
-//     }
-    
-//     if (Hostings[0].user.toString() !== req.user.id) {
-//       return res.status(401).send("not authorised");
-//     }
+    let q = query(collection(db, "booking"), where("user", "==", req.user.id));
+    const bookings= await getDocs(q);
+    if (bookings.docs.length===0) {
+      return res.send("Not found");
+    }
+    let arr1=bookings.docs.map((e)=>{
+      let obj=e.data()
+      obj['id']=e.id
+        return (
+          obj)
+    })
+    let arr2=await Promise.all(arr1);
    
-//     while(Hostings!==null)
-//     Hostings = await Hosting.findOneAndDelete() ;
-//     res.json({ success: "all Hosting has been deleted" });
-//   } catch (error) {
-//     console.error(error.message);
-//     res.status(500).send("Internal Server Error Occured");
-//   }
-// });
+   let a=0
+    while(a<arr2.length){
+      const docRef = doc(db, "booking",arr2[a].id );
+     await deleteDoc(docRef)
+     a=a+1
+    }
+    res.json({ success: "all bookings has been deleted" });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Internal Server Error Occured");
+  }
+});
 export default router

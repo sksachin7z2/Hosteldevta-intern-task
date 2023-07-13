@@ -1,7 +1,9 @@
 import React,{useState,useEffect} from 'react'
 import axios from 'axios'
 import Cookies from 'js-cookie'
+import {useNavigate} from 'react-router-dom'
 function PayoutsandBookings({host}) {
+  let navigate=useNavigate()
   const [bookings, setBookings] = useState([])
   const [hostinfo, sethostinfo] = useState([])
   const [pending, setPending] = useState([])
@@ -37,33 +39,67 @@ try {
 
   return (
     <div className='w-[80vw] m-auto mt-[15vh]'>
-        <div className='text-[#3f3d56] text-[1.5rem] font-semibold'>
-            Your Booking
-        </div>
+      <div className='flex gap-5 items-center'>
+                <div onClick={()=>navigate('/profile')}>
+                    My account
+                </div>
+                <div>
+                <svg width="24" height="24" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="30" height="30" transform="matrix(-1 0 0 -1 30 30)" fill="#FDFDFD"/>
+<path d="M12.4688 7.5L20 15.0312L12.4688 22.5625L11.125 21.2188L17.3125 15.0312L11.125 8.84375L12.4688 7.5Z" fill="#3F3D56"/>
+</svg>
 
-        <div className='my-7'>
-          <div className='grid sm:grid-cols-2 gap-5'>
-         
-          {
-              bookings.map((e)=>{
-                  return (
-                    
-                    <div className='rounded '>
-                      <div>CheckIn</div>
-                      <div>{e.checkin}</div>
-                      <div>CheckOut</div>
-                      <div>{e.checkout}</div>
-                     
-                    </div>
-                  
-                  )
-              })
-            }
-          
-
-          </div>
-           
-        </div>
+                </div>
+                <div>
+                    payments and Payouts
+                </div>
+            
+            </div>
+<div>
+  <div className='flex justify-between items-center mt-5'>
+    <div>
+      <div className='text-lg text-[#3f3d56] font-semibold'>Your Payments</div>
+      <div>Keep track of all your payments and funds</div>
+    </div>
+    <div>
+        <button onClick={()=>{navigate('/profile/payments/managepayments')}} className="py-1 px-3 text-white bg-[#3f3d56] border rounded-md hover:scale-110 duration-300">Manage payments</button>
+      
+    </div>
+  </div>
+  <hr className='my-1'/>
+  <div className='flex justify-between items-center mt-5'>
+    <div>
+      <div className='text-lg text-[#3f3d56] font-semibold'>Payout</div>
+      <div>Add at least one payout method so we know where to send your money</div>
+    </div>
+    <div>
+        <button onClick={()=>{navigate('/profile/payments/payout')}} className="py-1 px-3 text-white bg-[#3f3d56] border rounded-md hover:scale-110 duration-300">Set up Payouts</button>
+      
+    </div>
+  </div>
+  <hr className='my-1'/>
+  <div className='flex justify-between items-center mt-5'>
+    <div>
+      <div className='text-lg text-[#3f3d56] font-semibold'>Coupons</div>
+      <div>Add a coupon and save on your next stay</div>
+    </div>
+    <div>
+        <button onClick={()=>{navigate('/profile/payments/payout')}} className="py-1 px-5 text-white bg-[#3f3d56] border rounded-md hover:scale-110 duration-300">Add coupons</button>
+      
+    </div>
+  </div>
+  <hr className='my-1'/>
+  <div className='flex justify-between items-center mt-5'>
+    <div>
+      <div className='text-lg text-[#3f3d56] font-semibold'>Gift credit</div>
+      <div>Redeem a gift card</div>
+    </div>
+    <div>
+        <button onClick={()=>{navigate('/profile/payments/payout')}} className="py-1 px-3 text-white bg-[#3f3d56] border rounded-md hover:scale-110 duration-300">Add gift cards</button>
+      
+    </div>
+  </div>
+</div>
     </div>
   )
 }

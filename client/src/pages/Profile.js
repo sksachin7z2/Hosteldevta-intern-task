@@ -31,7 +31,7 @@ function Profile() {
                         Update your personal details
                     </div>
             </div>
-            <div onClick={()=>navigate(`/security`)} className='p-5 border border-[#3f3d56] rounded-md'>
+            <div onClick={()=>navigate(`/profile/security`)} className='p-5 border border-[#3f3d56] rounded-md'>
                 <div className='flex items-center gap-3'>
                     <div>
                     <svg width="24" height="24" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -50,7 +50,7 @@ function Profile() {
 account
                     </div>
             </div>
-            <div onClick={()=>navigate(`/payoutandbookings`)} className='p-5 border border-[#3f3d56] rounded-md'>
+            <div onClick={()=>navigate(`/profile/payments`)} className='p-5 border border-[#3f3d56] rounded-md'>
                 <div className='flex items-center gap-3'>
                     <div>
                     <svg width="24" height="24" viewBox="0 0 35 38" fill="none" xmlns="http://www.w3.org/2000/svg">
