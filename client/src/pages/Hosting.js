@@ -62,6 +62,7 @@ function Hosting({host}) {
         }
       
       }
+      const [userId, setUserId] = useState("")
     const getdata=async()=>{
         try {
             const fetch=await axios.post(`${host}/api/auth/getuser`,{},{
@@ -69,6 +70,7 @@ function Hosting({host}) {
             })
             const data=fetch.data.user;
                 setUser(data)
+                setUserId(fetch.data.userId)
         } catch (error) {
             console.log(error)
         }
@@ -154,6 +156,10 @@ for (let row of getbook) for (let e of row) arr.push(e);
             })
             const data=createhosting.data;
             console.log(data);
+            const review=await axios.post(`${host}/api/reviews/addreviews/${data.host}`,{
+                reviews:{star:[0,0],comments:[],stari:[]}
+            })
+            console.log(review.data)
             navigate(`/hosting/${data.host}/about-your-dorm`)
 
         } catch (error) {

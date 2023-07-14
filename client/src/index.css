@@ -73,6 +73,9 @@
     height:0px;
     width:3px
   }
+  svg.star-svg {
+    display: inline;
+}
   .w-auto{
     width:auto !important
   }

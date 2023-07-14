@@ -11,6 +11,7 @@ import hostingRoute from './routes/hosting.js'
 import bookingRoute from './routes/booking.js'
 import paymentRoute from './routes/paymentgateway.js'
 import transactionRoute from './routes/transaction.js'
+import reviewsRoute from './routes/reviews.js'
 // const multer = require('multer')
 // import processFile from './middleware/upload.js'
 // const processFile = require("./middleware/upload");
@@ -119,6 +120,7 @@ app.use('/api/hosting',hostingRoute)
 app.use('/api/booking',bookingRoute)
 app.use('/api',paymentRoute)
 app.use('/api/transaction',transactionRoute)
+app.use('/api/reviews',reviewsRoute)
 app.listen(PORT, () => {
   console.log(`server starting at port http://localhost:${PORT}`)
 })
