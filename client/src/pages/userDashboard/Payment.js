@@ -3,11 +3,14 @@ import {useNavigate,useLocation} from 'react-router-dom'
 import Calendar from 'react-calendar'
 import axios from 'axios'
 import { Suspense, lazy } from 'react';
+import queryString from 'query-string';
 import Cookies from 'js-cookie'
 
 import { useUserAuth } from "../../context/auth";
 
 function Payment({host}) {
+    let location=useLocation()
+    const {update}=queryString.parse(location.search)
     const [userId, setUserId] = useState("")
     const getuserid=async()=>{
         try {
@@ -27,7 +30,7 @@ function Payment({host}) {
 
     }
     let navigate=useNavigate()
-    let location=useLocation()
+    
    const [rooms, setRooms] = useState([])
     let params=location.pathname.split('/')[2];
     const [details, setDetails] = useState({totalbed:{},title:"",description:"",price:{},discount:[],rooms:[{
@@ -215,7 +218,7 @@ function Payment({host}) {
                 clearInterval(myInterval)
                 clearTimeout(tt)
                 try {
-                    const fetch=await axios.put(`${host}/api/booking/updateBooking/${bookId}`,{bookedon:new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), new Date().getHours(), new Date().getMinutes(), 0, 0),ispaid:true,orderId:init.data.orderId,txnToken:init.data.txnToken},{
+                    const fetch=await axios.put(`${host}/api/booking/updateBooking/${bookId}`,{bookedon:new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), new Date().getHours(), new Date().getMinutes(), 0, 0),ispaid:true,orderId:init.data.orderId,txnToken:init.data.txnToken,isfree:true},{
                         headers:{
                             "auth-token":Cookies.get("dorm--7z2__PMRW")
                         }
@@ -277,76 +280,89 @@ function Payment({host}) {
         getuserid();
     console.log((booking))
       }, [])
+      const handleupdatepay=async()=>{
+        try {
+            const fetc=await axios.put(`${host}/api/booking/updateBooking/${bookId}`,{pan:pancard,phone:phone,paymentUpi:paymentUpi},{
+                headers:{
+                    "auth-token":Cookies.get("dorm--7z2__PMRW")
+                }
+            })
+            console.log(fetc.data)
+            navigate('/bookings')
+        } catch (error) {
+            console.log(error)
+        }
+      }
 // const [timer, setTimer] = useState({minutes:2,seconds:0})
 
 
-      function isDate(val) {
-        // Cross realm comptatible
-        return Object.prototype.toString.call(val) === '[object Date]'
-      }
+//       function isDate(val) {
+//         // Cross realm comptatible
+//         return Object.prototype.toString.call(val) === '[object Date]'
+//       }
       
-      function isObj(val) {
-        return typeof val === 'object'
-      }
+//       function isObj(val) {
+//         return typeof val === 'object'
+//       }
       
-       function stringifyValue(val) {
-        if (isObj(val) && !isDate(val)) {
-          return JSON.stringify(val)
-        } else {
-          return val
-        }
-      }
+//        function stringifyValue(val) {
+//         if (isObj(val) && !isDate(val)) {
+//           return JSON.stringify(val)
+//         } else {
+//           return val
+//         }
+//       }
       
-      function buildForm({ action, params }) {
-        const form = document.createElement('form')
-        form.setAttribute('method', 'post')
-        form.setAttribute('action', action)
+//       function buildForm({ action, params }) {
+//         const form = document.createElement('form')
+//         form.setAttribute('method', 'post')
+//         form.setAttribute('action', action)
       
-        Object.keys(params).forEach(key => {
-          const input = document.createElement('input')
-          input.setAttribute('type', 'hidden')
-          input.setAttribute('name', key)
-          input.setAttribute('value', stringifyValue(params[key]))
-          form.appendChild(input)
-        })
+//         Object.keys(params).forEach(key => {
+//           const input = document.createElement('input')
+//           input.setAttribute('type', 'hidden')
+//           input.setAttribute('name', key)
+//           input.setAttribute('value', stringifyValue(params[key]))
+//           form.appendChild(input)
+//         })
       
-        return form
-      }
+//         return form
+//       }
       
-       function post(details) {
-        const form = buildForm(details)
-        document.body.appendChild(form)
-        form.submit()
-        form.remove()
-      }
+//        function post(details) {
+//         const form = buildForm(details)
+//         document.body.appendChild(form)
+//         form.submit()
+//         form.remove()
+//       }
     
-  const getDat=(data)=>
-  {
+//   const getDat=(data)=>
+//   {
 
-    return fetch(`http://localhost:5000/api/payment`,{
-        method:"POST",
-        headers:{
-            Accept:"application/json",
-            "Content-Type":"application/json"
-        },
-        body:JSON.stringify(data)
-    }).then(response=>response.json()).catch(err=>console.log(err))
-  }
+//     return fetch(`http://localhost:5000/api/payment`,{
+//         method:"POST",
+//         headers:{
+//             Accept:"application/json",
+//             "Content-Type":"application/json"
+//         },
+//         body:JSON.stringify(data)
+//     }).then(response=>response.json()).catch(err=>console.log(err))
+//   }
 
 
 
-    const makePayment=()=>
-    {
-getDat({amount:500,email:'abc@gmail.com'}).then(response=>{
+//     const makePayment=()=>
+//     {
+// getDat({amount:500,email:'abc@gmail.com'}).then(response=>{
  
-    var information={
-        action:"https://securegw-stage.paytm.in/order/process",
-        params:response
-    }
-  post(information)
+//     var information={
+//         action:"https://securegw-stage.paytm.in/order/process",
+//         params:response
+//     }
+//   post(information)
 
-})
-    }
+// })
+//     }
 
 
       const {booking,setBooking,paymentStatus,setPaymentStatus}=useUserAuth()
@@ -355,9 +371,7 @@ getDat({amount:500,email:'abc@gmail.com'}).then(response=>{
      const transactionref=useRef()
   return (
     <>
-     {/* {<button onClick={()=>setTransactionmodal(true)} ref={transactionref}  class="hidden text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center " type="button">
-  Toggle modal
-</button>} */}
+    
 
 {transactionmodal &&<div  tabindex="-1"  class="backdrop-blur-md flex justify-center items-center  fixed top-0 left-0 right-0 z-50  w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
     <div class="relative w-full max-w-2xl max-h-full">
@@ -498,9 +512,12 @@ getDat({amount:500,email:'abc@gmail.com'}).then(response=>{
     <div className='text-[#3f3d56] text-sm'>
     By selecting the button below, I agree to the terms and conditions of DormInn.
         </div>
-    <div className='my-4'>
+    {!update?<div className='my-4'>
     <button onClick={handleconfirmandpay} type="button" className="text-white bg-[#3f3d56]  focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center mr-3 md:mr-0 ">Confirm and Pay</button>
     </div>
+    :<div className='my-4'>
+   {booking.ispaid? <button onClick={handleupdatepay} type="button" className="text-white bg-[#3f3d56]  focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center mr-3 md:mr-0 ">Update info</button>:<button onClick={handleconfirmandpay} type="button" className="text-white bg-[#3f3d56]  focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center mr-3 md:mr-0 ">Update and Pay</button> }
+    </div>}
 </div>
 
 </div>

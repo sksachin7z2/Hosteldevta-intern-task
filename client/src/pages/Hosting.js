@@ -274,6 +274,66 @@ let arr=filter
         setBookings(arr)
         setHelper(!helper)
     }
+ 
+    const handlecheckoutbooking=async(g)=>{
+        const userId=g.user;
+        try {
+            
+        let ab=listing
+        let details=ab.find(f=>{return f.id===g.hostId})
+            const fetch=await axios.put(`${host}/api/booking/updateBooking/${g.id}`,{ischeckout:true},{
+                headers:{
+                    "auth-token":Cookies.get("dorm--7z2__PMRW"),
+                    "hostuser":userId
+                }
+            })
+            const data=fetch.data;
+            console.log(data)
+            let a=details.rooms.map((e)=>{
+                return e.nobpd
+               })
+               let s=new Set(a)
+               let ritr=Array.from(s)
+            let obj1={}
+        let arr= details.rooms.map((e)=>{
+      
+ 
+         obj1[`${e?.nobpd}`]=(e?.nobpd*e?.nod);
+       
+            return ""
+         })
+        let obj=details.totalbed;
+        console.log(obj)
+        ritr.map((e)=>{
+            if((g.totalbedorrooms[e]))
+            {
+              if(g.totalbedorrooms[e]['beds'])
+              {
+                if((obj[e]+g.totalbedorrooms[e]['beds'])<=obj1[e])
+                  obj[e]=obj[e]+g.totalbedorrooms[e]['beds']
+                  else
+                  obj[e]=obj1[e]
+              }
+              else{
+                if((obj[e]+g.totalbedorrooms[e]['rooms']*e)<=obj1[e])
+                obj[e]=obj[e]+g.totalbedorrooms[e]['rooms']*e
+                else
+                obj[e]=obj1[e]
+              }
+            }
+        })
+        console.log(obj)
+            const updatehosting=await axios.put(`${host}/api/hosting/updateHosting/${g.hostId}`,{totalbed:obj},{
+             headers:{
+                 "auth-token":Cookies.get('dorm--7z2__PMRW')
+             }
+         })
+         console.log(updatehosting.data)
+         getallbookings()
+        } catch (error) {
+            console.log(error)
+        }
+    }
   return (
     <>
      <button onClick={()=>setModal(true)} ref={ref}  class="hidden text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center " type="button">
@@ -463,7 +523,7 @@ let arr=filter
                        
                 </div>
                 <div className='px-5 py-3 mt-6  bg-[#3F3D560F] '>
-                    <div className="grid grid-cols-9 text-center text-[#3f3d56] text-md     font-semibold">
+                    <div className="grid grid-cols-10 text-center text-[#3f3d56] text-md     font-semibold">
                     <div className='overflow-x-scroll'>Hosting_Id</div>
                      <div className='overflow-x-scroll'>Dormitory_title</div>
                      <div className='overflow-x-scroll'>Guest Name</div>
@@ -479,6 +539,7 @@ let arr=filter
                         </div>
                         <div className='overflow-x-scroll'>Stay</div>
                         <div className='overflow-x-scroll'>payment_status</div>
+                        <div className='overflow-x-scroll'>checkout</div>
                        
                         
                         </div>
@@ -488,7 +549,7 @@ let arr=filter
                         
                    
                     
-                <div className='grid grid-cols-9 text-center gap-3 '>
+                <div className='grid grid-cols-10 text-center gap-3 '>
                     <div>
                         
                         <div>
@@ -600,7 +661,7 @@ let arr=filter
                                 bookings.map((e)=>{
                                     return (
                                         <div className='overflow-x-scroll'>
-                                            {(e.ispaid===false)?"Not Booked":((new Date(e.checkout) - new Date(e.checkin)) / (1000 * 60 * 60 * 24))}
+                                            {(e.ispaid===false)?"Not Booked":(((new Date(e.checkout) - new Date(e.checkin)) / (1000 * 60 * 60 * 24))+1)}
                                         </div>
                                     )
                                 })
@@ -617,6 +678,27 @@ let arr=filter
                                     return (
                                         <div className='overflow-x-scroll'>
                                            {e.ispaid?"Done":"Pending"}
+                                        </div>
+                                    )
+                                })
+                            }
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                     
+                      <div>
+                      <div>
+                            {
+                                bookings.map((e)=>{
+                                    return (
+                                        <div className='overflow-x-scroll'>
+                                           {(!e.ischeckout)?(e.ispaid)?(!e.isfree )?
+                                           <div>
+                                            <button onClick={()=>handlecheckoutbooking(e)} className='px-2 py-1 text-white bg-[#3f3d56]'>checkout </button>
+                                           </div>
+
+                                           : <div>ongoing</div>: <div>Not paid</div>: <div className='text-green-600'>Checkouted</div> }
                                         </div>
                                     )
                                 })

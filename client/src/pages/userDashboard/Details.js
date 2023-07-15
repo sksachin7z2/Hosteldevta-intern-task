@@ -238,7 +238,7 @@ setMaxRoom(arr1)
         }
       
       }
-      let {bookId}=QueryString.parse(location.search)
+      let {bookId,update}=QueryString.parse(location.search)
       console.log(bookId)
       const getBooking=async()=>{
         try {
@@ -376,7 +376,7 @@ console.log(error)
             adults:adults,
             children:children,
             infants:infant,
-            price:totalprice*((new Date(checkout) - new Date(checkin)) / (1000 * 60 * 60 * 24)),
+            price:totalprice*(((new Date(checkout) - new Date(checkin)) / (1000 * 60 * 60 * 24))+1),
             totalbedorrooms:totalbedorrooms,
             reviews:[],
             comments:[],
@@ -392,6 +392,8 @@ console.log(error)
             phone:"",
             orderId:"",
             txnToken:"",
+            isfree:false,
+            ischeckout:false
          
         }
         
@@ -462,7 +464,7 @@ console.log(error)
             adults:adults,
             children:children,
             infants:infant,
-            price:totalprice*((new Date(checkout) - new Date(checkin)) / (1000 * 60 * 60 * 24)),
+            price:totalprice*(((new Date(checkout) - new Date(checkin)) / (1000 * 60 * 60 * 24))+1),
             totalbedorrooms:totalbedorrooms,
             reviews:[],
             comments:[],
@@ -478,6 +480,8 @@ console.log(error)
             phone:"",
             orderId:"",
             txnToken:"",
+            isfree:false,
+            ischeckout:false
          
         }
         
@@ -494,7 +498,10 @@ console.log(error)
             })
             const data=fetch.data;
             console.log(data)
+            if(!update)
             navigate(`/payment/${params}/${bookId}`)
+            else
+            navigate(`/payment/${params}/${bookId}?update=${true}`)
             
         } catch (error) {
             console.log(error)

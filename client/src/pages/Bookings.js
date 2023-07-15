@@ -1,7 +1,9 @@
 import React,{useState,useEffect} from 'react'
 import axios from 'axios'
 import Cookies from 'js-cookie'
+import {useNavigate} from 'react-router-dom'
 function Bookings({host}) {
+  let navigate=useNavigate()
     const [bookings, setBookings] = useState([])
     const [hostinfo, sethostinfo] = useState([])
     const [booking, setBooking] = useState({})
@@ -224,8 +226,12 @@ function Bookings({host}) {
         <div className='text-green-600 font-semibold text-lg'>Booking Confirmed</div>
         </div></> : <div className='text-orange-600 font-semibold text-lg'>Pending</div> }
 </div>
-
+<div className='flex gap-2 items-center'>
+<div onClick={()=>{navigate(`/detail/${hosti.id}?bookId=${booking.id}&update=${true}`)}} className='px-2 py-1 rounded bg-[#3f3d56] text-white'>Update booking</div>
 <div onClick={cancelbooking} className='px-2 py-1 rounded bg-[#3f3d56] text-white'>Cancel booking</div>
+
+</div>
+
 </div>
 
                     </div>
@@ -260,7 +266,7 @@ function Bookings({host}) {
                                     <div className='text-md text-[#3f3d56] '>Staying for</div>
                                     <div className='text-md text-[#3f3d56]  '>
                                         {
-                                             (new Date(e.checkout) - new Date(e.checkin)) / (1000 * 60 * 60 * 24)
+                                             ((new Date(e.checkout) - new Date(e.checkin)) / (1000 * 60 * 60 * 24)+1)
                                         } nights
                                     </div>
                                     </div>

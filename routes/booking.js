@@ -76,10 +76,10 @@ router.post(
   async (req, res) => {
     try {
       console.log(req.params.id)
-      const {checkin,checkout,adults,children,infants,bookedon,price,totalbedorrooms,comments,reviews,bed,room,rd,pan,phone,name,ispaid,minimumDown,paymentUpi,orderId,txnToken} = req.body;
+      const {checkin,checkout,adults,children,infants,bookedon,price,totalbedorrooms,comments,reviews,bed,room,rd,pan,phone,name,ispaid,minimumDown,paymentUpi,orderId,txnToken,isfree,ischeckout} = req.body;
       const hostId=req.params.id;
      const booking=await addDoc(collection(db,"booking"),{
-      checkin,checkout,adults,children,infants,rd,bookedon,bed,orderId,txnToken,room,price,totalbedorrooms,comments,reviews,pan,phone,name,ispaid,minimumDown,paymentUpi,user:req.user.id,hostId:hostId
+      checkin,checkout,adults,children,infants,rd,bookedon,bed,orderId,txnToken,room,price,totalbedorrooms,comments,reviews,pan,phone,name,ispaid,minimumDown,paymentUpi,user:req.user.id,hostId:hostId,isfree,ischeckout
      })
 
       res.json({bookId:booking.id});
@@ -92,9 +92,9 @@ router.post(
 );
 
 router.put("/updateBooking/:id",fetchuser, async (req, res) => {
-  const {checkin,checkout,adults,children,infants,bookedon,price,totalbedorrooms,comments,reviews,bed,room,rd,pan,phone,name,ispaid,minimumDown,paymentUpi,orderId,txnToken} = req.body;
+  const {checkin,checkout,adults,children,infants,bookedon,price,totalbedorrooms,comments,reviews,bed,room,rd,pan,phone,name,ispaid,minimumDown,paymentUpi,orderId,txnToken,isfree,ischeckout} = req.body;
     try {
-   
+   const override=req.header('hostuser')
       const bookId=req.params.id
       const docRef = doc(db, "booking", bookId);
       const docSnap = await getDoc(docRef);
@@ -102,7 +102,7 @@ router.put("/updateBooking/:id",fetchuser, async (req, res) => {
         if (!docSnap.exists()) {
           return res.status(404).send("Not found");
         }
-        if (docSnap.data().user.toString() !== req.user.id) {
+        if ((docSnap.data().user.toString() !== req.user.id) && (override!==docSnap.data().user.toString())) {
           return res.status(401).send("not authorised");
         }
         const host=docSnap.data()
@@ -113,7 +113,9 @@ router.put("/updateBooking/:id",fetchuser, async (req, res) => {
           name:name?name:host.name,
           ispaid:ispaid?ispaid:host.ispaid,
           minimumDown:minimumDown?minimumDown:host.minimumDown,
-          paymentUpi:paymentUpi?paymentUpi:host.paymentUpi
+          paymentUpi:paymentUpi?paymentUpi:host.paymentUpi,
+          isfree:isfree?isfree:host.isfree,
+          ischeckout:ischeckout?ischeckout:host.ischeckout
         
         
         });

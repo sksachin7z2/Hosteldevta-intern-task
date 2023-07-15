@@ -19,7 +19,7 @@ function BookingCard({ rooms, booking, details, price }) {
                 
                 <div className='text-[#3f3d56] font-semibold text-[1.2rem] my-1'> Your Total</div>
                 <div className='text-[1.2rem] text-[#3f3d56]'>
-                    {(new Date(booking.checkout) - new Date(booking.checkin)) / (1000 * 60 * 60 * 24)} nights
+                    {((new Date(booking.checkout) - new Date(booking.checkin)) / (1000 * 60 * 60 * 24)+1)} nights
                 </div>
                 <div className='flex justify-between items-center mt-2'>
                 <div className='text-[#3f3d56] font-semibold text-[1.2rem]'>Minimum Downpayment</div>
@@ -30,7 +30,7 @@ function BookingCard({ rooms, booking, details, price }) {
                     </div>
                     <div className='text-[#3f3d56] text-lg font-semibold'>
 
-                        {parseInt(booking.price)/((new Date(booking.checkout) - new Date(booking.checkin)) / (1000 * 60 * 60 * 24))}
+                        {parseInt(booking.price)/(((new Date(booking.checkout) - new Date(booking.checkin)) / (1000 * 60 * 60 * 24))+1)}
                     </div>
                 </div>
                

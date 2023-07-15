@@ -12,6 +12,9 @@ import bookingRoute from './routes/booking.js'
 import paymentRoute from './routes/paymentgateway.js'
 import transactionRoute from './routes/transaction.js'
 import reviewsRoute from './routes/reviews.js'
+
+import db from "./firebase-config.js";
+import { collection, query, where, getDocs, getDoc, addDoc, doc, onSnapshot, limit, deleteDoc,updateDoc } from "firebase/firestore";
 // const multer = require('multer')
 // import processFile from './middleware/upload.js'
 // const processFile = require("./middleware/upload");
@@ -115,6 +118,25 @@ app.use((err, req, res, next) => {
   })
   next()
 })
+
+setInterval(async()=>{
+  const querySnapshot = await getDocs(collection(db, "booking"));
+ let arr= querySnapshot.docs.map(async(e)=>{
+    if((new Date(e.data().checkout)<new Date()) && (e.data().ispaid===true))
+    {
+      try {
+        const docRef = doc(db, "booking", e.id);
+        const update=await updateDoc(docRef,{isfree:false})
+        
+      } catch (error) {
+        console.log(error)
+      }
+    
+    }
+    return 0
+  })
+  let arr2=await Promise.all(arr)
+},12000)
 app.use('/api/auth',userRoute)
 app.use('/api/hosting',hostingRoute)
 app.use('/api/booking',bookingRoute)
