@@ -84,7 +84,7 @@ function Details({host,google}) {
             obj[e]=1
         }
         else{
-            if(t=='add')
+            if(t==='add')
             {
                 obj[e]= parseInt( obj[e])+1
             }
@@ -105,7 +105,7 @@ function Details({host,google}) {
             obj[e]=1
         }
         else{
-            if(t=='add')
+            if(t==='add')
             {
                 obj[e]=obj[e]+1
             }
@@ -126,7 +126,7 @@ function Details({host,google}) {
             obj[e]=1
         }
         else{
-            if(t=='add')
+            if(t==='add')
             {
                 obj[e]=obj[e]+1
             }
@@ -147,7 +147,7 @@ function Details({host,google}) {
             obj[e]=1
         }
         else{
-            if(t=='add')
+            if(t==='add')
             {
                 obj[e]=obj[e]+1
             }
@@ -168,7 +168,7 @@ function Details({host,google}) {
             obj[e]=1
         }
         else{
-            if(t=='add')
+            if(t==='add')
             {
                 obj[e]=obj[e]+1
             }
@@ -189,7 +189,7 @@ function Details({host,google}) {
     const handlecardinfo=(e,i,f)=>{
         var result = value 
        let cd=Cookies.get('calendarvalue')
-     if(i=="guest")
+     if(i==="guest")
      {
         result[`${e}`]={...result[`${e}`],[i]:f.target.value}
         
@@ -282,6 +282,8 @@ console.log(error)
         
   }
       useEffect(() => {
+        if(!Cookies.get('dorm--7z2__PMRW'))
+        navigate('/login')
         getdata()
        getroomdata();
        getreviews()
@@ -292,7 +294,7 @@ console.log(error)
         setHelper(!helper)
         let s=Cookies.get('cardstatus')
         console.log(s)
-        if(s=="checkin")
+        if(s==="checkin")
         setCheckin(e);
         else
         setCheckout(e)
@@ -348,7 +350,7 @@ console.log(error)
         let totalprice=0
         let totalbedorrooms={}
         for(var i in rd){
-            if(rd[i]=="bed")
+            if(rd[i]==="bed")
             {
                 
                 totalbedorrooms[i]={...totalbedorrooms[i],['beds']: parseInt( bed[i])}
@@ -398,7 +400,7 @@ console.log(error)
         }
         
         
-        if(checkin!="" && checkout!="" && totalprice!==0){
+        if(checkin!=="" && checkout!=="" && totalprice!==0){
         console.log(booking)
         setBooking(booking)
         console.log(params)
@@ -429,7 +431,7 @@ console.log(error)
         let totalbedorrooms={}
         
         for(var i in rd){
-            if(rd[i]=="bed")
+            if(rd[i]==="bed")
             {
                 if(parseInt(bed[i])>0){
                 totalbedorrooms[i]={...totalbedorrooms[i],['beds']: parseInt( bed[i])}
@@ -486,7 +488,7 @@ console.log(error)
         }
         
         
-        if(checkin!="" && checkout!="" && totalprice!==0){
+        if(checkin!=="" && checkout!=="" && totalprice!==0){
         console.log(booking)
         setBooking(booking)
         console.log(params)
@@ -520,7 +522,7 @@ console.log(error)
                     user:userId,
                     rating:rating
                 }]
-                if(arr.length==0){
+                if(arr.length===0){
                 const f=await axios.post(`${host}/api/reviews/updatereviews/${params}`,{
                 reviews:{comments:reviewinfo.comments,star:[rating,0],stari:obj}
             })
@@ -798,13 +800,13 @@ console.log(error)
    </section>
    <section>
         <div className='my-3 text-[#3F3D56] text-[1.5rem] font-semibold'>Select Your dorm room</div>
-        <div className='flex my-3'>
-                                    <div className="relative">
-                                    <input value={checkin}  onClick={()=>{calendarref.current.click();Cookies.set('cardstatus',"checkin")}} className='block rounded-t-lg px-2.5 pb-2.5 pt-5 w-full text-sm text-gray-900 bg-gray-50  border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer' type="text" name="" id="" placeholder='checkin'/>
+        <div className='flex my-3 justify-center '>
+                                    <div className="relative mx-1">
+                                    <input value={checkin}  onClick={()=>{calendarref.current.click();Cookies.set('cardstatus',"checkin")}} className='block rounded-t-lg px-2.5 pb-2.5 pt-5 w-[40vw] text-sm text-gray-900 bg-gray-50  border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer' type="text" name="" id="" placeholder='checkin'/>
                                     <label  className="absolute text-sm text-gray-500  duration-300 transform -translate-y-4 scale-75 top-4  ">Checkin</label>
                                     </div>
                                     <div className="relative">
-                                    <input value={checkout} onClick={()=>{calendarref.current.click();Cookies.set('cardstatus',"checkout")}} className='block rounded-t-lg px-2.5 pb-2.5 pt-5 w-full text-sm text-gray-900 bg-gray-50  border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer' type="text" name="" id="" placeholder='checkout'/>
+                                    <input value={checkout} onClick={()=>{calendarref.current.click();Cookies.set('cardstatus',"checkout")}} className='block rounded-t-lg px-2.5 pb-2.5 pt-5 w-[40vw] text-sm text-gray-900 bg-gray-50  border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer' type="text" name="" id="" placeholder='checkout'/>
                                     <label  className="absolute text-sm text-gray-500  duration-300 transform -translate-y-4 scale-75 top-4  ">Checkout</label>
                                     </div>
                                 </div>
@@ -836,7 +838,7 @@ console.log(error)
     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
   </svg></button>
 
-{ guest[e] && <div className="absolute p-3 bg-white rounded-md w-[100%] md:w-[70%]">
+{ guest[e] && <div className="absolute p-3 bg-white rounded-md w-[100%] md:w-[70%] z-10 border border-[#3f3d56] ">
                       <div>
                         <div className='flex justify-between items-center'>
                           <div className='text-[#3F3D56] font-semibold'>Adults</div>
@@ -889,13 +891,13 @@ console.log(error)
                             </svg></div>
                           </div>
                         </div>
-                        <div className='my-1 text-[#3f3d56]'>
+                        <div className='my-1 text-[#3f3d56] font-semibold '>
                             Select one of following
                         </div>
                         <div className='flex justify-center gap-5'>
-                            <div onClick={()=>handleswitchrd(e,"room")} >Room</div>
-                            <div>--OR--</div>
-                            <div  onClick={()=>handleswitchrd(e,"bed")}  >Bed</div>
+                            <div className='text-[#3f3d56]' onClick={()=>handleswitchrd(e,"room")} >Room</div>
+                            <div className='text-[#3f3d56]'>--OR--</div>
+                            <div className='text-[#3f3d56]' onClick={()=>handleswitchrd(e,"bed")}  >Bed</div>
                         </div>
                         { rd[e]==="bed"?<div className='flex justify-between items-center'>
                           <div className='text-[#3F3D56] font-semibold'>Beds</div>

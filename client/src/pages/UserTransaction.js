@@ -1,7 +1,9 @@
 import React,{useState,useEffect} from 'react'
 import axios from 'axios'
 import Cookies from 'js-cookie'
+import { useNavigate } from 'react-router-dom'
 function UserTransaction({host}) {
+    let navigate=useNavigate()
 const [transactions, setTransactions] = useState([])
 const getTransactions=async()=>{
     try {
@@ -28,6 +30,8 @@ const getTransactions=async()=>{
     }
 }
 useEffect(() => {
+    if(!Cookies.get('dorm--7z2__PMRW'))
+    navigate('/login')
   getTransactions()
 
  

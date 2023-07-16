@@ -13,7 +13,7 @@ function UserDashboard({ host }) {
   const [children, setChildren] = useState(0)
   const [traveller, setTraveller] = useState(false)
   const [helper, setHelper] = useState(false)
-  const { ref, autocompleteRef } = usePlacesWidget({
+  const { ref } = usePlacesWidget({
     apiKey: "AIzaSyBRPX04XfjCp7A7_14Vw-Np9m5EiCawsQE",
     onPlaceSelected: (place) => {
       // console.log(place);
@@ -29,6 +29,7 @@ function UserDashboard({ host }) {
       place?.address_components.map((e,i)=>{
          obj=({...obj,[e.types[0]]:e.long_name})
           console.log(e.types[0],e.long_name)
+          return ""
       })
       console.log(obj)
       setAddress(obj)
@@ -64,13 +65,14 @@ console.log(arr4)
       setFilter(arr4)
       let arr1 = []
       console.log(data)
-      data.allhost.map((e, i) => {
+      data.allhost.map((e) => {
         let arr = []
         let obj = (e?.price)
         for (var i in obj) {
           arr.push(`${i}o${e?.price[i]}`)
         }
         arr1.push(arr)
+        return ""
       })
       arr1=arr1.filter(e=>e.length!==0)
       console.log(arr1)
@@ -94,6 +96,8 @@ console.log(arr4)
 
   }
   useEffect(() => {
+    if(!Cookies.get('dorm--7z2__PMRW'))
+      navigate('/login')
     getdata();
     getroomdata()
   }, [])
@@ -287,7 +291,7 @@ console.log(arr,address.country)
           </div>
         </div>
 
-        <div style={{ display: "-webkit-box" }} className='overflow-x-scroll w-[80vw] m-auto gap-5 items-center' id='slider'>
+        <div style={{ display: "-webkit-box" }} className='overflow-x-scroll  m-auto gap-5 items-center' id='slider'>
           <div className='p-1 h-[35vh] sm:w-[200px] w-[285px] md:w-[150px]  rounded-md '>
             <div className='h-[80%] rounded-md' style={{ backgroundImage: `url("https://images.unsplash.com/photo-1596176530529-78163a4f7af2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=927&q=80")`, backgroundSize: "cover" }}>
 
@@ -334,6 +338,30 @@ console.log(arr,address.country)
             </div>
             <div className='my-1 text-[#3F3D56] text-center'>
               Guwahati
+            </div>
+          </div>
+          <div className='p-1 h-[35vh] sm:w-[200px] w-[285px] md:w-[150px]  rounded-md'>
+            <div className='h-[80%] rounded-md' style={{ backgroundImage: `url("https://images.unsplash.com/photo-1597074866923-dc0589150358?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80")`, backgroundSize: "cover" }}>
+
+            </div>
+            <div className='my-1 text-[#3F3D56] text-center'>
+              Shimla
+            </div>
+          </div>
+          <div className='p-1 h-[35vh] sm:w-[200px] w-[285px] md:w-[150px]  rounded-md'>
+            <div className='h-[80%] rounded-md' style={{ backgroundImage: `url("https://images.unsplash.com/photo-1562315921-ca0e98571219?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80")`, backgroundSize: "cover" }}>
+
+            </div>
+            <div className='my-1 text-[#3F3D56] text-center'>
+              Jorhat
+            </div>
+          </div>
+          <div className='p-1 h-[35vh] sm:w-[200px] w-[285px] md:w-[150px]  rounded-md'>
+            <div className='h-[80%] rounded-md' style={{ backgroundImage: `url("https://images.unsplash.com/photo-1561359313-0639aad49ca6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dmFyYW5hc2l8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60")`, backgroundSize: "cover" }}>
+
+            </div>
+            <div className='my-1 text-[#3F3D56] text-center'>
+              Varanasi
             </div>
           </div>
         </div>

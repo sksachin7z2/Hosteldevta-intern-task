@@ -29,6 +29,8 @@ function Roomselector({host}) {
       
       }
       useEffect(() => {
+        if(!Cookies.get('dorm--7z2__PMRW'))
+        navigate('/login')
        getroomdata();
     
       }, [])
@@ -123,7 +125,7 @@ function Roomselector({host}) {
     const handledelete=(e,i)=>{
             let arr=Alltotal;
             delete arr[i]
-let ans=arr.filter((e)=>e!=undefined)
+let ans=arr.filter((e)=>e!==undefined)
             setAlltotal(ans)
             setHelper(!helper)
 

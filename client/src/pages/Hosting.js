@@ -138,6 +138,8 @@ for (let row of getbook) for (let e of row) arr.push(e);
       
       }
       useEffect(() => {
+        if(!Cookies.get('dorm--7z2__PMRW'))
+        navigate('/login')
        getdata();
     getroomdata()
     getallbookings()
@@ -585,7 +587,7 @@ let arr=filter
                             {
                                 bookings.map((e)=>{
                                     return (
-                                        <div onClick={()=>setguestall(e)} className='overflow-x-scroll'>
+                                        <div onClick={()=>setguestall(e)} className='overflow-x-scroll text-[#3f3d56] font-semibold'>
                                             {e.name.split(' ').join("_").split('-').join('_')}
                                         </div>
                                     )
@@ -601,7 +603,7 @@ let arr=filter
                                 bookings.map((e)=>{
                                     return (
                                         <div>
-                                            <div onClick={()=>setall(e)} className='cursor-pointer'>Click_to_view</div>
+                                            <div onClick={()=>setall(e)} className='cursor-pointer text-[#3f3d56] font-semibold  overflow-x-scroll'>Click_to_view</div>
 
                                         </div>
                                     )

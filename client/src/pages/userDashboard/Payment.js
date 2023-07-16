@@ -8,7 +8,7 @@ import Cookies from 'js-cookie'
 
 import { useUserAuth } from "../../context/auth";
 
-function Payment({host}) {
+function Payment({host,setProgress}) {
     let location=useLocation()
     const {update}=queryString.parse(location.search)
     const [userId, setUserId] = useState("")
@@ -37,6 +37,7 @@ function Payment({host}) {
         nobpd: 0,
         nod: 0
     }],lat:null,lon:null,ammeneties:{wifi:false,TV:false,washingmachine:false,studyplace:false,airconditioning:false,bathrooms:false,mess:false,toilets:false,water:false,gym:false,playarea:false,unisex:false,kitchen:false},photos:[],contact:[{contact:""}],security:{camera:false,animals:false,watchman:false,fireextinguiser:false},bathrooms:0,toilets:0,address:{country:"",administrative_area_level_1:"",locality:"",administrative_area_level_2:"",administrative_area_level_3:"",postal_code:"",addressl1:"",addressl2:"",neighborhood:""},status:{'1':false,'2':false,'3':false,'4':false,'5':false,'6':false,'7':false}})
+    const [star,setStar]=useState(0)
     const getroomdata=async()=>{
         try {
             const fetch=await axios.post(`${host}/api/hosting/fetchHosting/${params}`,{},{
@@ -52,8 +53,9 @@ function Payment({host}) {
                })
                let s=new Set(arr)
                console.log(Array.from(s),data.host.price)
-
-
+            const star=await axios.post(`${host}/api/reviews/fetchallreviews/${data.host.id}`);
+            setStar(star.data.allreviews.reviews.star[0])
+            
                 setRooms(Array.from(s))
      setDetails(data?.host)
 
@@ -103,6 +105,7 @@ function Payment({host}) {
                     "auth-token":Cookies.get("dorm--7z2__PMRW")
                 }
             })
+            setProgress(20)
             const data=fetc.data;
             console.log(data)
             // makePayment()
@@ -120,6 +123,7 @@ function Payment({host}) {
             })
             const init=initiate.data
             console.log(init)
+            setProgress(40)
             const validate=await axios.post("https://paypis.hosteldevta.com/validateUPI",{
                 
                     "orderId": init.data.orderId,
@@ -135,6 +139,7 @@ function Payment({host}) {
             })
             const f=validate.data
             console.log(f)
+            setProgress(60)
             if(f.resultInfo.resultStatus==='S')
             {
 
@@ -171,7 +176,7 @@ function Payment({host}) {
                 } catch (error) {
                     console.log(error)
                 }
-               
+                setProgress(100)
                 navigate(`/paymentstatus/${params}/${bookId}`)
                 return
             },122000)//2 minutes timeout
@@ -213,6 +218,7 @@ function Payment({host}) {
             console.log(fo)
             if(fo.resultInfo.resultStatus==='TXN_SUCCESS')
             {
+                setProgress(80)
                 clearInterval(checkstatus)
                 setTransactionmodal(false)
                 clearInterval(myInterval)
@@ -248,7 +254,7 @@ function Payment({host}) {
             }
         })
         console.log(updatehosting.data)
-                    
+        setProgress(100)
                 } catch (error) {
                     console.log(error)
                     alert(error)
@@ -275,6 +281,8 @@ function Payment({host}) {
         }
       }
       useEffect(() => {
+        if(!Cookies.get('dorm--7z2__PMRW'))
+        navigate('/login')
        getroomdata();
         getBooking()
         getuserid();
@@ -526,7 +534,7 @@ function Payment({host}) {
         </div>
         <div>
         <Suspense fallback={<div>Loading...</div>}>
-            <BookingCard rooms={rooms} details={details} booking={booking} />
+            <BookingCard rooms={rooms} details={details} booking={booking} star={star}/>
             </Suspense>
         </div>
         </div>

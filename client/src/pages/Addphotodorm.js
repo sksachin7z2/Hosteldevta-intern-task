@@ -26,6 +26,8 @@ function Addphotodorm({host}) {
   
   }
   useEffect(() => {
+    if(!Cookies.get('dorm--7z2__PMRW'))
+    navigate('/login')
    getroomdata();
 
   }, [])
@@ -47,7 +49,7 @@ function Addphotodorm({host}) {
             })
             let arr1=await Promise.all(arr)
             console.log(arr1)
-           let arr2=photos.filter(e=>e[0]!='b')
+           let arr2=photos.filter(e=>e[0]!=='b')
             // setPhotos([...photos,...arr1])
             let obj=status;
         obj['2']=true;

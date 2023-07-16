@@ -34,6 +34,8 @@ const getuserinfo=async()=>{
    
 }
 useEffect(()=>{
+    if(!Cookies.get('dorm--7z2__PMRW'))
+    navigate('/login')
 getuserinfo()
 },[])
     let navigate=useNavigate()

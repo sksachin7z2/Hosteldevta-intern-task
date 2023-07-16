@@ -30,6 +30,8 @@ function Info({host}) {
         setShowup(true)
     }
     useEffect(() => {
+        if(!Cookies.get('dorm--7z2__PMRW'))
+        navigate('/login')
      getuserinfo()
     }, [])
     const handleupdatebtn=async()=>{

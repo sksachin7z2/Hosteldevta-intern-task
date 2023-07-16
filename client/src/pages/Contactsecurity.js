@@ -28,6 +28,8 @@ function Contactsecurity({host}) {
       
       }
       useEffect(() => {
+        if(!Cookies.get('dorm--7z2__PMRW'))
+        navigate('/login')
        getroomdata();
     
       }, [])
@@ -76,7 +78,7 @@ const [helper, setHelper] = useState(false)
 const handledeletefield=(i)=>{
     let arr=contact;
     delete arr[i]
-let ans=arr.filter((e)=>e!=undefined)
+let ans=arr.filter((e)=>e!==undefined)
     setContact(ans)
     setHelper(!helper)
 

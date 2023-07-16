@@ -3,6 +3,7 @@ import {useNavigate,Link,useLocation} from 'react-router-dom'
 import {auth} from '../firebase-config'
 import Avatar from 'react-avatar'
 import Saveexit from './Saveexit'
+import { HashLink } from 'react-router-hash-link';
 import {
  
   signOut,
@@ -119,10 +120,10 @@ Dashboard
         <Link to="/" className="text-[#3f3d56] block py-2 pl-3 pr-4 rounded  md:p-0 " aria-current="page">Home</Link>
       </li>
       <li>
-        <Link to="/about-us" className="text-[#3f3d56] block py-2 pl-3 pr-4 rounded  md:p-0 ">About</Link>
+        <HashLink to="/#about" className="text-[#3f3d56] block py-2 pl-3 pr-4 rounded  md:p-0 ">About</HashLink>
       </li>
       <li>
-        <Link to="/contact-us" className="text-[#3f3d56] block py-2 pl-3 pr-4 rounded  md:p-0">Contact</Link>
+        <HashLink to="/#contact" className="text-[#3f3d56] block py-2 pl-3 pr-4 rounded  md:p-0">Contact</HashLink>
       </li>
      
    
@@ -131,10 +132,10 @@ Dashboard
         <Link to="/" className="text-[#3f3d56] block py-2 pl-3 pr-4 rounded  md:p-0 " aria-current="page">Today</Link>
       </li>
       <li>
-        <Link to="/about-us" className="text-[#3f3d56] block py-2 pl-3 pr-4 rounded  md:p-0 ">Inbox</Link>
+        <div  className="text-[#3f3d56] block py-2 pl-3 pr-4 rounded  md:p-0 ">Inbox</div>
       </li>
       <li>
-        <Link to="/contact-us" className="text-[#3f3d56] block py-2 pl-3 pr-4 rounded  md:p-0">Calender</Link>
+        <div  className="text-[#3f3d56] block py-2 pl-3 pr-4 rounded  md:p-0">Calender</div>
       </li>
       
      
@@ -149,10 +150,10 @@ Dashboard
         <Link to="/" className="block py-2 pl-3 pr-4   rounded  md:p-0 " aria-current="page">Home</Link>
       </li>
       <li>
-        <Link to="/about-us" className="block py-2 pl-3 pr-4 text-gray-900 rounded  md:p-0 ">About</Link>
+        <HashLink to="/#about" className="block py-2 pl-3 pr-4 text-gray-900 rounded  md:p-0 ">About</HashLink>
       </li>
       <li>
-        <Link to="/contact-us" className="block py-2 pl-3 pr-4  md:p-0 ">Contact</Link>
+        <HashLink to="/#contact" className="block py-2 pl-3 pr-4  md:p-0 ">Contact</HashLink>
       </li>
       <li>
         {/* <Link to="/help" className="block py-2 pl-3 pr-4 text-gray-900 rounded md:p-0 ">Help</Link>
@@ -180,10 +181,10 @@ Dashboard
         <Link to="/" className="block py-2 pl-3 pr-4   rounded  md:p-0 " aria-current="page">Home</Link>
       </li>
       <li>
-        <Link to="/about-us" className="block py-2 pl-3 pr-4 text-gray-900 rounded  md:p-0 ">About</Link>
+        <HashLink to="/#about" className="block py-2 pl-3 pr-4 text-gray-900 rounded  md:p-0 ">About</HashLink>
       </li>
       <li>
-        <Link to="/contact-us" className="block py-2 pl-3 pr-4  md:p-0 ">Contact</Link>
+        <HashLink to="/#contact" className="block py-2 pl-3 pr-4  md:p-0 ">Contact</HashLink>
       </li>
       <li>
         {/* <Link to="/help" className="block py-2 pl-3 pr-4 text-gray-900 rounded md:p-0 ">Help</Link>

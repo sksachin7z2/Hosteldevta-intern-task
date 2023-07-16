@@ -26,6 +26,8 @@ function TitleandDescription({host}) {
   
   }
   useEffect(() => {
+    if(!Cookies.get('dorm--7z2__PMRW'))
+    navigate('/login')
    getroomdata();
 
   }, [])

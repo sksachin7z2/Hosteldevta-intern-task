@@ -39,6 +39,7 @@ import Bookings from './pages/Bookings';
 import Payouts from './pages/Payouts';
 import UserTransaction from './pages/UserTransaction';
 import ResetPassword from './pages/ResetPassword';
+import LoadingBar from 'react-top-loading-bar'
 function App(props) {
   const host="http://localhost:5000"
   const [lat, setLat] = useState(0)
@@ -52,18 +53,23 @@ const getlocation=()=>{
 useEffect(() => {
   getlocation()
 }, [])
-
+const [progress,setProgress]=useState(0)
   return (
     <Context>
     <Router>
       <Navbar/>
+      <LoadingBar
+        color='#f11946'
+        progress={progress}
+        onLoaderFinished={() => setProgress(0)}
+      />
       <Routes>
         <Route exact path='/' element={<Landing host={host}/>}/>
         <Route exact path='/hostdashboard' element={<Hosting host={host}/>}/>
 
         <Route exact path='/dashboard' element= {<UserDashboard host={host}/>}/>
         <Route exact path='/detail/:id' element= {<Details host={host}/>}/>
-        <Route exact path='/payment/:id/:bid' element= {<Payment host={host}/>}/>
+        <Route exact path='/payment/:id/:bid' element= {<Payment host={host}  setProgress={setProgress}/>}/>
         <Route exact path='/paymentstatus/:id/:bid' element= {<PaymentStatus host={host}/>}/>
 
 

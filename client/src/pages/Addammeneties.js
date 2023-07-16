@@ -33,6 +33,8 @@ const getroomdata=async()=>{
   
   }
   useEffect(() => {
+    if(!Cookies.get('dorm--7z2__PMRW'))
+    navigate('/login')
    getroomdata();
 
   }, [])

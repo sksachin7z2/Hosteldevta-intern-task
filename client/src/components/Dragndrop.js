@@ -57,12 +57,12 @@ export default function DragDropFile({setFiles,files,photos,setPhotos}) {
     const handledelete=(id)=>{
         let arr=photos;
         delete arr[id];
-        let ans=arr.filter(e=>e!=undefined)
+        let ans=arr.filter(e=>e!==undefined)
         setPhotos(ans)
 
         let arr1=files;
         delete arr1[id];
-        let ans1=arr1.filter(e=>e!=undefined)
+        let ans1=arr1.filter(e=>e!==undefined)
         setFiles(ans1)
 
     }

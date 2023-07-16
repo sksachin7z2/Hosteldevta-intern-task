@@ -63,13 +63,14 @@ function Listing({host}) {
             setListings(arr4)
             let arr1=[]
             console.log(data)
-            data.allhost.map((e,i)=>{
+            data.allhost.map((e)=>{
                 let arr=[]
                 let obj=(e?.price)
                 for(var i in obj){
                    arr.push(`${i}o${e?.price[i]}`)
                 }
                 arr1.push(arr)
+                return ""
             })
             arr1=arr1.filter(e=>e.length!==0)
            console.log(arr1)
@@ -79,7 +80,8 @@ function Listing({host}) {
         }
     }
     useEffect(() => {
-    
+        if(!Cookies.get('dorm--7z2__PMRW'))
+        navigate('/login')
         getlistings()
 
     }, [])
