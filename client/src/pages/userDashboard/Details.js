@@ -577,6 +577,7 @@ console.log(error)
         }
        
     }
+    const [photosModal, setPhotosModal] = useState(false)
   return (
     <>
     <button onClick={()=>setModal(true)} ref={calendarref}  class="hidden text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center " type="button">
@@ -603,6 +604,43 @@ console.log(error)
             <div class="p-6 space-y-6">
             <div >
                                         <Calendar tileDisabled={ (Cookies.get('cardstatus')==="checkin")? tileDisabled: (e)=>tileDisabled1(e,Cookies.get('cardstatus'))} className="rounded-b-md w-auto b-none" onChange={(e)=>handleChangeCalendar(e.toLocaleDateString())} value={calendar} />
+                                        </div>
+            </div>
+          
+     
+        </div>
+    </div>
+</div>}
+{photosModal &&<div  tabindex="-1"  class="backdrop-blur-md flex justify-center items-center  fixed top-0 left-0 right-0 z-50  w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative w-full max-w-5xl max-h-full">
+       
+        <div class="relative bg-white rounded-lg shadow ">
+        
+            <div class="flex items-start justify-between p-4 border-b rounded-t ">
+                <h3 class="text-xl font-semibold text-gray-900">
+                  All Photos
+                </h3>
+                <button onClick={()=>setPhotosModal(false)} type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center " data-modal-hide="defaultModal">
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+        
+            <div class="p-6 space-y-6">
+            <div >
+                                        <div className='grid grid-cols-2 gap-2'>
+                                           {
+                                            details.photos.map((e)=>{
+                                                return (
+                                                    <div style={{backgroundImage:`url(${e})`,backgroundSize:"cover",height:'25vh'}}>
+
+                                                    </div>
+                                                )
+                                            })
+                                           }
+                                        </div>
                                         </div>
             </div>
           
@@ -649,7 +687,7 @@ console.log(error)
                 </div>
             </div>
             <section>
-                <div className="grid grid-cols-[70%_30%] gap-2 my-4">
+                <div className="grid grid-cols-[70%_30%] gap-2 my-4 relative">
                     <div style={{backgroundImage:`url(${details.photos[0]})`,backgroundSize:"cover"}} className='h-[40vh] rounded-md '>
 
                     </div>
@@ -660,6 +698,11 @@ console.log(error)
         <div style={{backgroundImage:`url(${details.photos[2]})`,backgroundSize:"cover"}} className='h-[19.5vh] rounded-md '>
 
         </div>
+                    </div>
+                    <div onClick={()=>setPhotosModal(true)} className='absolute right-1 bottom-2 bg-white rounded-md'>
+                        <div className='rounded py-1 px-2'>
+                            All photos
+                        </div>
                     </div>
                 </div>
                 <div className='text-[#3F3D56]'>
@@ -980,14 +1023,14 @@ console.log(error)
       <div>
         <button onClick={()=>{handleiupdatereviews()}} className='py-1 rounded px-2 bg-[#3f3d56] text-white'>add comment</button>
       </div>
-      <div className='my-3 h-[30vh] w-[30vw] overflow-scroll'>
+      <div className='my-3 h-[30vh] overflow-scroll'>
 {
     reviews.map((e)=>{
         if(e==="")
         return <div></div>
         return(
             <div className='my-2'>
-            <div className='grid grid-cols-[20%_80%] gap-3 '>
+            <div className='flex items-center  gap-2 '>
                 <div>
                 <div > <Avatar round={true} size={30} name={e.user}/> 
                </div>
@@ -1001,11 +1044,11 @@ console.log(error)
               
                 
             </div>
-            <div className='grid grid-cols-[20%_80%] gap-3'>
+            <div className='flex items-center gap-2 '>
                     <div>
 
                     </div>
-                    <div className='text-sm text-[#3f3d56]'>{e.comment}</div>
+                    <div className='text-sm text-[#3f3d56] my-1'>{e.comment}</div>
                 </div>
             </div>
         )
@@ -1047,11 +1090,26 @@ console.log(error)
       </Map>
     </div>
    </section>
+   <section className='mb-[5rem]'>
+    <div className='text-[#3f3d56] font-semibold text-[1.5rem]'>Contact Us</div>
+    <div>
+        {details.contact.map((e)=>{
+            return (
+                <div className='text-[#3f3d56] font-semibold'>
+                    {e.contact}
+                </div>
+            )
+        })}
+    </div>
+
+
+
+   </section>
     </div>
     </>
   )
 }
 
 export default GoogleApiWrapper({
-    apiKey: 'AIzaSyBRPX04XfjCp7A7_14Vw-Np9m5EiCawsQE'
+    apiKey: process.env.REACT_APP_MAPKEY
   })(Details);

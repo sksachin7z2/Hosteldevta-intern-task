@@ -14,7 +14,7 @@ function UserDashboard({ host }) {
   const [traveller, setTraveller] = useState(false)
   const [helper, setHelper] = useState(false)
   const { ref } = usePlacesWidget({
-    apiKey: "AIzaSyBRPX04XfjCp7A7_14Vw-Np9m5EiCawsQE",
+    apiKey: process.env.REACT_APP_MAPKEY,
     onPlaceSelected: (place) => {
       // console.log(place);
       console.log(place)

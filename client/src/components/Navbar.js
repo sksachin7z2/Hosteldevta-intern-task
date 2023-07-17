@@ -42,9 +42,9 @@ navigate('/')
     </div>
  
   <div className="flex md:order-2">
-      {/* <button type="button" className="text-white bg-[#3F3D56] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center mr-3 md:mr-0 ">Get started</button> */}
+      {/* <button type="button" className="text-white bg-[#3F3D56] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center mr-3 md:mr-0 ">Get started</button> */}           
       <div className='md:block hidden'>
-    {!( Cookies.get('dorm--7z2__PMRW'))? <div className='flex gap-4' > <div>
+    {!( Cookies.get('dorm--7z2__PMRW'))? <div className='flex gap-4'><div>
     <Link to='/login'> <button type="button" className="text-white bg-[#3f3d56] hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-1 text-center mr-3 md:mr-0 ">Login</button></Link>
       </div>
       <div>

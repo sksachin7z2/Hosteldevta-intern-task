@@ -25,7 +25,7 @@ let location=useLocation();
 let params=location.pathname.split('/')[2];
 const locateonmap=async()=>{
   try {
-    const fetch=await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?components=route:${address.route}|neighborhood:${address.neighborhood}|administrative_area_1:${address.administrative_area_1}|administrative_area_2:${address.administrative_area_2}|administrative_area_3:${address.administrative_area_3}|locality:${address.locality}|country:${address.country}|postal_code:${address.postal_code}&key=AIzaSyBRPX04XfjCp7A7_14Vw-Np9m5EiCawsQE`)
+    const fetch=await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?components=route:${address.route}|neighborhood:${address.neighborhood}|administrative_area_1:${address.administrative_area_1}|administrative_area_2:${address.administrative_area_2}|administrative_area_3:${address.administrative_area_3}|locality:${address.locality}|country:${address.country}|postal_code:${address.postal_code}&key=${process.env.REACT_APP_MAPKEY}`)
 const data=fetch.data
 console.log(data)
 setLat(data?.results[0]?.geometry?.location?.lat)
@@ -65,7 +65,7 @@ const handlemapclick=async(r,e,w)=>{
   setLat(w.latLng.lat());
   setLon(w.latLng.lng());
   try {
-    const fetch= await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${w.latLng.lat()},${w.latLng.lng()}&key=${"AIzaSyBRPX04XfjCp7A7_14Vw-Np9m5EiCawsQE"}`)
+    const fetch= await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${w.latLng.lat()},${w.latLng.lng()}&key=${process.env.REACT_APP_MAPKEY}`)
     const data=fetch.data;
     console.log(data)
     let obj={country:"",administrative_area_level_1:"",locality:"",administrative_area_level_2:"",administrative_area_level_3:"",postal_code:""}
@@ -79,7 +79,7 @@ const handlemapclick=async(r,e,w)=>{
   }
 }
   const { ref, autocompleteRef } = usePlacesWidget({
-    apiKey:"AIzaSyBRPX04XfjCp7A7_14Vw-Np9m5EiCawsQE",
+    apiKey:process.env.REACT_APP_MAPKEY,
     onPlaceSelected: (place) => {
       // console.log(place);
       console.log(place)
@@ -225,6 +225,6 @@ const handlemapclick=async(r,e,w)=>{
 }
 
 export default GoogleApiWrapper({
-  apiKey: 'AIzaSyBRPX04XfjCp7A7_14Vw-Np9m5EiCawsQE'
+  apiKey: process.env.REACT_APP_MAPKEY
 })(MapContainer);
 // export default MapContainer
