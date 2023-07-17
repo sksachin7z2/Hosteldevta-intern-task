@@ -39,7 +39,7 @@ app.disable('x-powered-by')
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: false}))
 
-
+app.use(express.static(__dirname+'/build'))
 
 // mongoconnect();
 app.post('/uploads',Multer.array('file'), async (req, res, next) => {
