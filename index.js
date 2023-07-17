@@ -30,7 +30,7 @@ import { format } from 'util'
 // const { Storage } = require("@google-cloud/storage");
 import { Storage } from '@google-cloud/storage'
 // Instantiate a storage client with credentials
-const storage = new Storage({ keyFilename: "./private/keys.json" , projectId:'dorminn' });
+const storage = new Storage({ keyFilename: "./keys.json" , projectId:'dorminn' });
 const bucket = storage.bucket("media-bucket-7z2");
 
 const Multer = multer({Storage})
@@ -38,6 +38,8 @@ app.disable('x-powered-by')
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: false}))
+
+
 
 // mongoconnect();
 app.post('/uploads',Multer.array('file'), async (req, res, next) => {
