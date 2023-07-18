@@ -12,25 +12,19 @@ import bookingRoute from './routes/booking.js'
 import paymentRoute from './routes/paymentgateway.js'
 import transactionRoute from './routes/transaction.js'
 import reviewsRoute from './routes/reviews.js'
-
-import db from "./firebase-config.js";
-import { collection, query, where, getDocs, getDoc, addDoc, doc, onSnapshot, limit, deleteDoc,updateDoc } from "firebase/firestore";
-// const multer = require('multer')
-// import processFile from './middleware/upload.js'
-// const processFile = require("./middleware/upload");
-// const uploadImage = require('./helpers/helpers')
-// const {mongoconnect} =require('./db');
-// const cors=require('cors');
-const app = express()
-const PORT=5000
-app.use(cors())
-// const processFile = require("../middleware/upload");
-// const { format } = require("util");
 import { format } from 'util'
-// const { Storage } = require("@google-cloud/storage");
+
 import { Storage } from '@google-cloud/storage'
 
 import { fileURLToPath } from 'url';
+import db from "./firebase-config.js";
+import { collection, query, where, getDocs, getDoc, addDoc, doc, onSnapshot, limit, deleteDoc,updateDoc } from "firebase/firestore";
+
+const app = express()
+const PORT=5000
+app.use(cors())
+
+
 
 
 // Instantiate a storage client with credentials
