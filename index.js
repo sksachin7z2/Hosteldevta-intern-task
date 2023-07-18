@@ -30,7 +30,7 @@ const __filename = fileURLToPath(import.meta.url);
 
 const __dirname = path.dirname(__filename);
 // Instantiate a storage client with credentials
-const storage = new Storage({ keyFilename: __dirname+"/keys.json" , projectId:'dorminn' });
+const storage = new Storage({ keyFilename: "keys.json" , projectId:'dorminn' });
 const bucket = storage.bucket("media-bucket-7z2");
 
 const Multer = multer({Storage})
