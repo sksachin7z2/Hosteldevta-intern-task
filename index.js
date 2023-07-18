@@ -29,6 +29,10 @@ app.use(cors())
 import { format } from 'util'
 // const { Storage } = require("@google-cloud/storage");
 import { Storage } from '@google-cloud/storage'
+
+import { fileURLToPath } from 'url';
+
+
 // Instantiate a storage client with credentials
 const storage = new Storage({ keyFilename: "./keys.json" , projectId:'dorminn' });
 const bucket = storage.bucket("media-bucket-7z2");
@@ -38,7 +42,9 @@ app.disable('x-powered-by')
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: false}))
+const __filename = fileURLToPath(import.meta.url);
 
+const __dirname = path.dirname(__filename);
 app.use(express.static(__dirname+'/build'))
 
 // mongoconnect();
