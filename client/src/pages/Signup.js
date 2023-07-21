@@ -5,7 +5,7 @@ import { createUserWithEmailAndPassword,signInWithPopup } from "firebase/auth";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
-const Signup = () => {
+const Signup = ({host}) => {
   let navigate=useNavigate()
   const [credential, setCredential] = useState({ email: "",username:"", password: "" })
   const handleSignUp =async () => {
@@ -20,7 +20,7 @@ try {
     Cookies.set('email', email)
     Cookies.set('name',name)
  
-       const url="http://localhost:5000/api/auth";
+       const url=`${host}/api/auth`;
     const resp=await axios.post(`${url}/createUser1`,{email:credential.email,name:credential.username,address:"",contact:"",dob:"",nationality:"",pan:"",gender:""})
 const res=resp.data
 if(!res.authToken)
@@ -48,7 +48,7 @@ else{
         Cookies.set('email', email)
         Cookies.set('name',name)
       
-       const url="http://localhost:5000/api/auth"
+       const url=`${host}/api/auth`
         const user=await axios.post(`${url}/createUser1`,{email:email,name:name,address:"",contact:"",dob:"",nationality:"",pan:"",gender:""});
         const res=user.data;
         console.log(res)
