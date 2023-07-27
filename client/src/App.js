@@ -41,7 +41,7 @@ import UserTransaction from './pages/UserTransaction';
 import ResetPassword from './pages/ResetPassword';
 import LoadingBar from 'react-top-loading-bar'
 function App(props) {
-  const host="https://api-dot-dorminn.uc.r.appspot.com"
+  const host="https://dorminn1.onrender.com"
   const [lat, setLat] = useState(0)
 const [lon, setLon] = useState(0)
 const getlocation=()=>{
