@@ -1,0 +1,28 @@
+{
+  "files": {
+    "main.css": "/static/css/main.7573c29e.css",
+    "main.js": "/static/js/main.fa712d2d.js",
+    "static/js/966.7f2afc2e.chunk.js": "/static/js/966.7f2afc2e.chunk.js",
+    "static/js/952.b7d37b8f.chunk.js": "/static/js/952.b7d37b8f.chunk.js",
+    "static/js/787.d32f1a28.chunk.js": "/static/js/787.d32f1a28.chunk.js",
+    "static/media/congrats.png": "/static/media/congrats.339e07f38fb3171e5755.png",
+    "static/media/signup.jpeg": "/static/media/signup.2587f5779235faccf48a.jpeg",
+    "static/media/userdash.png": "/static/media/userdash.4d8076811730ae52a76e.png",
+    "static/media/homebg.jpeg": "/static/media/homebg.b20d4648c3186e9ff8c4.jpeg",
+    "static/media/connect1.jpeg": "/static/media/connect1.42b35993ff2f44f588c5.jpeg",
+    "static/media/dweller1.jpeg": "/static/media/dweller1.71222b4a193285aae0a7.jpeg",
+    "static/media/login.jpeg": "/static/media/login.a6b48b56d1f467217f4d.jpeg",
+    "static/media/aboutyourdorm.jpeg": "/static/media/aboutyourdorm.8e6bc4f7d56dc523003c.jpeg",
+    "static/media/dweller2.jpeg": "/static/media/dweller2.3a483be03ccdbb645710.jpeg",
+    "index.html": "/index.html",
+    "main.7573c29e.css.map": "/static/css/main.7573c29e.css.map",
+    "main.fa712d2d.js.map": "/static/js/main.fa712d2d.js.map",
+    "966.7f2afc2e.chunk.js.map": "/static/js/966.7f2afc2e.chunk.js.map",
+    "952.b7d37b8f.chunk.js.map": "/static/js/952.b7d37b8f.chunk.js.map",
+    "787.d32f1a28.chunk.js.map": "/static/js/787.d32f1a28.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.7573c29e.css",
+    "static/js/main.fa712d2d.js"
+  ]
+}
