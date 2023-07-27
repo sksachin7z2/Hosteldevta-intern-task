@@ -358,16 +358,20 @@ console.log(error)
                 totalbed= parseInt( bed[i])
                 if(totalbed<=details.totalbed[i])
                 totalprice=totalprice+(totalbed* parseInt( details.price[i]))
-                else
+                else{
                 alert(`number of beds exceeded in ${i} seater dorm`)
+                return
+                }
             }
             else{
                 totalbedorrooms[i]={...totalbedorrooms[i],['rooms']: parseInt( room[i])}
                 totalbed=parseInt(room[i])*i
                 if(totalbed<=details.totalbed[i])
                 totalprice=totalprice+(totalbed* parseInt( details.price[i]))
-                else
+                else{
                 alert(`number of beds exceeded in ${i} seater dorm`)
+                return
+                }
             }
         }
         console.log(totalbedorrooms,totalprice)
