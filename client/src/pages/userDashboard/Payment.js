@@ -277,7 +277,8 @@ function Payment({host,setProgress}) {
             
         } catch (error) {
             console.log(error)
-            alert(error)
+            navigate(`/paymentstatus/${params}/${bookId}`)
+           
         }
       }
       useEffect(() => {

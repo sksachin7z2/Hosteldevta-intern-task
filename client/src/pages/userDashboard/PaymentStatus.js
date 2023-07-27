@@ -57,9 +57,9 @@ function Booking({host}) {
                     (booking?.ispaid)===true? <div > <div className='text-green-600 font-semibold text-[1.5rem] text-center my-2'> Transaction Succesfull</div>
                     <div className='space-y-2'>
                     <div className='text-[#3f3d56] text-lg font-semibold'>OrderId</div>
-                    <div>{booking?.orderId}</div>
+                    <div>{(booking?.orderId)!==""?(booking?.orderId):"N/A"}</div>
                     <div className='text-[#3f3d56] text-lg font-semibold'>Transaction Token</div>
-                    <div>{booking?.txnToken}</div>
+                    <div>{(booking?.txnToken)!==""?(booking?.txnToken):"N/A"}</div>
                     <div className='text-[#3f3d56] text-lg font-semibold'>Amount</div>
                     <div>Rs. {booking?.minimumDown}</div>
                     <div className='text-[#3f3d56] text-lg font-semibold'> Received from </div>
