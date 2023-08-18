@@ -10,6 +10,7 @@ function Bookings({host}) {
     const [hosti, setHosti] = useState({})
     const [pending, setPending] = useState([])
     const [booked, setBooked] = useState([])
+    const [helper, setHelper] = useState(false)
     const getBookings=async()=>{
   try {
     const fetch= await axios.post(`${host}/api/booking/fetchallBookingUser`,{},{
@@ -30,6 +31,7 @@ function Bookings({host}) {
     }
     arr1.sort(comp)
     setBookings(arr1)
+    setHelper(!helper)
     let arr=arr1.map(async(e)=>{
         const fet=await axios.post(`${host}/api/hosting/fetchHosting/${e.hostId}`,{},{
           headers:{
