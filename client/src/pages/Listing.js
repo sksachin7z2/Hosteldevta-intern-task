@@ -154,13 +154,13 @@ Delete
                 </div>
 
                 <div className='text-[#3F3D56] text-[1.2rem] my-5 font-semibold'>Hosted Listing</div>
-                <div className='grid md:grid-cols-3 gap-2'>
+                <div className='grid md:grid-cols-3 gap-2 mb-7'>
                     {
                         listings.map((e,i)=>{
 return (
-                        <div  className='cursor-pointer rounded p-5 shadow'>
-                            <div>
-                                <img  src={e.photos[0]} alt="" />
+                        <div  className='h-[50vh] cursor-pointer rounded p-5 shadow'>
+                            <div className='h-[60%] rounded-md' style={{ backgroundImage: `url(${e?.photos[0]})`, backgroundSize: "cover" }}>
+                                
                             </div>
                             <div className='my-3 flex w-full justify-between'>
                                 <div>

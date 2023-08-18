@@ -6,7 +6,7 @@ import { signInWithEmailAndPassword,signInWithPopup,sendPasswordResetEmail } fro
 import axios from "axios";
 
 import Cookies from "js-cookie";
-const Signup = () => {
+const Signup = ({host}) => {
   const [credential, setCredential] = useState({ email: "", password: "" })
   const [forgot, setForgot] = useState(false)
   const forgotpassword=()=>{
@@ -33,7 +33,7 @@ const Signup = () => {
        Cookies.set('email', email)
        Cookies.set('name',name)
     
-          const url="http://localhost:5000/api/auth";
+          const url=`${host}/api/auth`;
        const resp=await axios.post(`${url}/login1`,{email:credential.email})
   const res=resp.data
   if(!res.authToken)
@@ -62,7 +62,7 @@ const Signup = () => {
           Cookies.set('email', email)
           Cookies.set('name',name)
         
-         const url="http://localhost:5000/api/auth"
+          const url=`${host}/api/auth`;
           const user=await axios.post(`${url}/createUser1`,{email:email,name:name,address:"",contact:"",dob:"",nationality:"",pan:"",gender:""});
           const res=user.data;
           console.log(res)
