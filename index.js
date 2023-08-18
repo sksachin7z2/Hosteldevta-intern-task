@@ -71,7 +71,7 @@ app.post('/uploads/:id',upload.array('file'), async (req, res, next) => {
     
     const arr=req.files
     
-    const hosturl="http://dorminn-7z2-prod.onrender.com"
+    const hosturl="https://dorminn-7z2-prod.onrender.com"
            let photos1=arr.map((e)=>{
               return {url:`${hosturl}/image/${e.filename}`}
            })
