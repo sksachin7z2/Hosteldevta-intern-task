@@ -112,6 +112,7 @@ function Bookings({host}) {
           }
       })
       console.log(updatehosting.data)
+      getBookings();
         } catch (error) {
           console.log(error)
         }
