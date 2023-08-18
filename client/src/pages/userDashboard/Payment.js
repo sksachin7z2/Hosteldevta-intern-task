@@ -5,7 +5,7 @@ import axios from 'axios'
 import { Suspense, lazy } from 'react';
 import queryString from 'query-string';
 import Cookies from 'js-cookie'
-
+import logo from '../../static/logo.png'
 import { useUserAuth } from "../../context/auth";
 
 function Payment({host,setProgress}) {
@@ -155,7 +155,7 @@ function Payment({host,setProgress}) {
                 order_id: result.data.id,
                 name: "Ecommerce ",
                 description: "Test Transaction",
-                image: "/DormLogo.png",
+                image: logo,
                 handler: async function (response) {
                     const result_1 = await axios.post(
                     `${host}/api/payment/getDetails`,
