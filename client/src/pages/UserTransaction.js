@@ -70,7 +70,7 @@ useEffect(() => {
                    
                     <div className='text-[#3f3d56] text-lg font-semibold'>Amount</div>
                     <div>Rs. {e?.amount}</div>
-                    <div className='text-[#3f3d56] text-lg font-semibold'> Received from </div>
+                    <div className='text-[#3f3d56] text-lg font-semibold'> Customer UPI </div>
                     <div>{e?.paymentUpi}</div>
 
                     </div>
@@ -97,7 +97,7 @@ useEffect(() => {
                     
                     <div className='text-[#3f3d56] text-lg font-semibold'>Amount</div>
                     <div>Rs. {e?.amount}</div>
-                    <div className='text-[#3f3d56] text-lg font-semibold'> Received from </div>
+                    <div className='text-[#3f3d56] text-lg font-semibold'> Customer UPI </div>
                     <div>{e?.paymentUpi}</div>
 
                     </div>

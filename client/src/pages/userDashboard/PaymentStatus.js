@@ -58,11 +58,11 @@ function Booking({host}) {
                     <div className='space-y-2'>
                     <div className='text-[#3f3d56] text-lg font-semibold'>OrderId</div>
                     <div>{booking?.orderId}</div>
-                    <div className='text-[#3f3d56] text-lg font-semibold'>Transaction Token</div>
+                    <div className='text-[#3f3d56] text-lg font-semibold'>Payment Method</div>
                     <div>{booking?.txnToken}</div>
                     <div className='text-[#3f3d56] text-lg font-semibold'>Amount</div>
                     <div>Rs. {booking?.minimumDown}</div>
-                    <div className='text-[#3f3d56] text-lg font-semibold'> Received from </div>
+                    <div className='text-[#3f3d56] text-lg font-semibold'> Customer's UPI </div>
                     <div>{booking?.paymentUpi}</div>
 
                     </div>

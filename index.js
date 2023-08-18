@@ -6,7 +6,6 @@ import crypto from 'crypto'
 import userRoute from './routes/user.js'
 import hostingRoute from './routes/hosting.js'
 import bookingRoute from './routes/booking.js'
-import paymentRoute from './routes/paymentgateway.js'
 import transactionRoute from './routes/transaction.js'
 import reviewsRoute from './routes/reviews.js'
 import db from "./firebase-config.js";
@@ -14,9 +13,11 @@ import mongoose from 'mongoose'
 import Grid from 'gridfs-stream'
 import multer from 'multer'
 import { fileURLToPath } from 'url';
+import dotenv from 'dotenv'
 import GridFsStorage from 'multer-gridfs-storage'
+import paymentRoute from './routes/paymentgateway.js'
 // import {mongo} from 'mongoose'
-
+dotenv.config()
 
 
 import { collection, query, where, getDocs, getDoc, addDoc, doc, onSnapshot, limit, deleteDoc,updateDoc } from "firebase/firestore";
@@ -31,8 +32,8 @@ app.use(bodyParser.urlencoded({ limit: '30mb', extended: true }))
 const __filename = fileURLToPath(import.meta.url);
 
 const __dirname = path.dirname(__filename);
-
-const mongoURI="mongodb+srv://sksachin7z2:ne3e6EGnklkQaiw3@cluster0.hlrymf6.mongodb.net/dorminn?retryWrites=true&w=majority"
+// console.log(process.env.MONGO_PASSWORD)
+const mongoURI=`mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@cluster0.hlrymf6.mongodb.net/dorminn?retryWrites=true&w=majority`
 // const mongoURI="mongodb://127.0.0.1:27017/npk?readPreference=primary&appname=MongoDB%20Compass&directConnection=true&ssl=false"
 const conn = mongoose.createConnection(mongoURI,()=>{
   console.log("connected to mongo")
@@ -145,7 +146,7 @@ app.use(express.static(__dirname+'/client/build'))
 app.use('/api/auth',userRoute)
 app.use('/api/hosting',hostingRoute)
 app.use('/api/booking',bookingRoute)
-app.use('/api',paymentRoute)
+app.use('/api/payment',paymentRoute)
 app.use('/api/transaction',transactionRoute)
 app.use('/api/reviews',reviewsRoute)
 

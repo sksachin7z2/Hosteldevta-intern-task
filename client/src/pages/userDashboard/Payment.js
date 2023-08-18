@@ -87,6 +87,19 @@ function Payment({host,setProgress}) {
       const [pancard, setPancard] = useState("")
       const [transactionmodal, setTransactionmodal] = useState(false)
       const [phone, setPhone] = useState("")
+      const loadScript = (src) => {
+        return new Promise ((resolve) => {
+        const script = document.createElement("script");
+        script.src = src;
+        script.onload = () => {
+        resolve(true);
+        };
+        script.onerror = () => {
+        resolve(false);
+        };
+        document.body.appendChild(script);
+        });
+        };
       const handleconfirmandpay=async()=>{
         if (!pancard || !phone ||!paymentUpi)
         {
@@ -109,177 +122,134 @@ function Payment({host,setProgress}) {
             const data=fetc.data;
             console.log(data)
             // makePayment()
-           
-           
-            const initiate=await axios.post("https://paypis.hosteldevta.com/initiate",{
-                "_id": userId,
-                "callbackUrl": "https://hosteldevta.com",
-                "amount": "1"
-            },{
-                headers:{
-                            'Accept': 'application/json',
-                           'Content-Type': 'application/json'
-                        }
-            })
-            const init=initiate.data
-            console.log(init)
-            setProgress(40)
-            const validate=await axios.post("https://paypis.hosteldevta.com/validateUPI",{
-                
-                    "orderId": init.data.orderId,
-                    "txnToken": init.data.txnToken,
-                    "payerAccount": paymentUpi,
-                    "amount": "1"
-                    
-            },{
-                headers:{
-                            'Accept': 'application/json',
-                           'Content-Type': 'application/json'
-                        }
-            })
-            const f=validate.data
-            console.log(f)
-            setProgress(60)
-            if(f.resultInfo.resultStatus==='S')
-            {
+            let orderId = "OD" + Math.floor(Math.random() * Math.floor(Math.random() * Date.now()));
+            const res = await loadScript(
+            "https://checkout.razorpay.com/v1/checkout.js"
+            );
+            if (!res) {
+            alert("Razorpay SDK failed to load. Are you online?");
+            return;
+            }
+            let paymentRes = {
+            order_id: orderId,
+            amount: booking.minimumDown,
+            currency: "INR",
+            payment_capture: 1,
+            }; 
+            let result = await axios.post(
+            `${host}/api/payment/create`,
+            paymentRes
+            );
+           console.log(result)
 
-            const process=await axios.post("https://paypis.hosteldevta.com/processTransaction",{
-                
-                    "orderId": init.data.orderId,
-                    "txnToken": init.data.txnToken,
-                    "payerAccount": paymentUpi,
-                    "amount": "1"
+
+
+           if (!result.data.data) {
+            alert("Server error. Are you online?");
+            return;
+            } else{
+            let options = {
+                key: "rzp_test_KtRILY77cqPQeb",
+                currency: result.data.data.currency,
+                amount: result.data.data.amount,
+                order_id: result.data.id,
+                name: "Ecommerce ",
+                description: "Test Transaction",
+                image: "./DormLogo.png",
+                handler: async function (response) {
+                    const result_1 = await axios.post(
+                    `${host}/api/payment/getDetails`,
+                    {id:response.razorpay_payment_id}
                     
-            },{
-                headers:{
-                            'Accept': 'application/json',
-                           'Content-Type': 'application/json'
-                        }
-            })
-            const fo=process.data
-            console.log(fo)
-           let tt= setTimeout(async()=>{
-                clearInterval(checkstatus)
-                clearInterval(myInterval)
-                setTransactionmodal(false)
-                try {
-                    const f=await axios.post(`${host}/api/transaction/addTransaction/${params}/${bookId}`,{
-                        ispaid:false,orderId:init.data.orderId,txnToken:init.data.txnToken,dormtitle:details.title,bookedon:new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), new Date().getHours(), new Date().getMinutes(), 0, 0),paymentUpi:paymentUpi,amount:booking.minimumDown
-    
-                    },{
-                        headers:{
-                            "auth-token":Cookies.get("dorm--7z2__PMRW")
-                        }
-                    })
-                    console.log(f.data)
-                    
-                } catch (error) {
-                    console.log(error)
-                }
-                setProgress(100)
-                navigate(`/paymentstatus/${params}/${bookId}`)
-                return
-            },122000)//2 minutes timeout
-         
-         let  myInterval = setInterval(() => {
-               
-                if (parseInt(document.getElementById('seconds').innerText) > 0) {
-                    document.getElementById('seconds').innerText=parseInt(document.getElementById('seconds').innerText)-1
-                }
-                else if (parseInt(document.getElementById('seconds').innerText) === 0) {
-                    if (parseInt(document.getElementById('minutes').innerText) === 0) {
-                        clearInterval(myInterval)
-                        setTransactionmodal(false)
-                    } else {
-                       document.getElementById('seconds').innerText=59
-                       document.getElementById('minutes').innerText=parseInt(document.getElementById('minutes').innerText)-1
+                    );
+                 
+
+                    if(result_1?.data?.success==true)
+                    {
+                        setProgress(80)
+                        try {
+                            const fetch=await axios.put(`${host}/api/booking/updateBooking/${bookId}`,{bookedon:new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), new Date().getHours(), new Date().getMinutes(), 0, 0),ispaid:true,orderId:result_1?.data?.data?.id,txnToken:result_1?.data?.data?.method,isfree:true},{
+                                headers:{
+                                    "auth-token":Cookies.get("dorm--7z2__PMRW")
+                                }
+                            })
+                            const data=fetch.data;
+                            console.log(data)
+                            // bookedon,dormtitle,ispaid,paymentUpi,orderId,txnToken
+                            const f=await axios.post(`${host}/api/transaction/addTransaction/${params}/${bookId}`,{
+                                ispaid:true,orderId:result_1?.data?.data?.id,txnToken:result_1?.data?.data?.method,dormtitle:details.title,bookedon:new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), new Date().getHours(), new Date().getMinutes(), 0, 0),paymentUpi:paymentUpi,amount:booking.minimumDown
+        
+                            },{
+                                headers:{
+                                    "auth-token":Cookies.get("dorm--7z2__PMRW")
+                                }
+                            })
+                            console.log(f.data)
+        
+        
+                            let obj=details.totalbed
+                   for(var i in booking.totalbedorrooms){
+                        obj[i]=booking.totalbedorrooms[i]['beds']?(obj[i]-booking.totalbedorrooms[i]['beds']):(obj[i]-(booking.totalbedorrooms[i]['rooms']*i))
+                   }
+                   console.log(obj)
+                   const updatehosting=await axios.put(`${host}/api/hosting/updateHosting/${params}`,{totalbed:obj},{
+                    headers:{
+                        "auth-token":Cookies.get('dorm--7z2__PMRW')
                     }
-                } 
-            }, 1000)
+                })
+                console.log(updatehosting.data)
+                setProgress(100)
+                        } catch (error) {
+                            console.log(error)
+                            alert(error)
+                        }
+                       
+                        navigate(`/paymentstatus/${params}/${bookId}`)
+                        return
+                    }
+                    else{
+                        try {
+                            const f=await axios.post(`${host}/api/transaction/addTransaction/${params}/${bookId}`,{
+                                ispaid:false,orderId:result_1?.data?.data?.id,txnToken:result_1?.data?.data?.method,dormtitle:details.title,bookedon:new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), new Date().getHours(), new Date().getMinutes(), 0, 0),paymentUpi:paymentUpi,amount:booking.minimumDown
+            
+                            },{
+                                headers:{
+                                    "auth-token":Cookies.get("dorm--7z2__PMRW")
+                                }
+                            })
+                            console.log(f.data)
+                            
+                        } catch (error) {
+                            console.log(error)
+                        }
+                        setProgress(100)
+                        navigate(`/paymentstatus/${params}/${bookId}`)
+                        return
+                    }
 
-
-
-            setTransactionmodal(true)
-           const checkstatus= setInterval(async function () {
-                const status=await axios.post("https://paypis.hosteldevta.com/paymentStatus",{
-                
-                    "orderId": init.data.orderId,
-                    "txnToken": init.data.txnToken,
-                    "payerAccount": paymentUpi,
-                    "amount": "1"
+                },
+                    prefill: 
+                    {
+                    email: "sksachin7z2@gmail.com",
+                    contact : booking.contact,
+                    },
+                    notes: {
+                    address: "Razorpay Corporate Office",
+                    },
+                    theme: {
+                    color: "#1f5215",
+                        }
+                    }
                     
-            },{
-                headers:{
-                            'Accept': 'application/json',
-                           'Content-Type': 'application/json'
-                        }
-            })
-            const fo=status.data
-            console.log(fo)
-            if(fo.resultInfo.resultStatus==='TXN_SUCCESS')
-            {
-                setProgress(80)
-                clearInterval(checkstatus)
-                setTransactionmodal(false)
-                clearInterval(myInterval)
-                clearTimeout(tt)
-                try {
-                    const fetch=await axios.put(`${host}/api/booking/updateBooking/${bookId}`,{bookedon:new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), new Date().getHours(), new Date().getMinutes(), 0, 0),ispaid:true,orderId:init.data.orderId,txnToken:init.data.txnToken,isfree:true},{
-                        headers:{
-                            "auth-token":Cookies.get("dorm--7z2__PMRW")
-                        }
-                    })
-                    const data=fetch.data;
-                    console.log(data)
-                    // bookedon,dormtitle,ispaid,paymentUpi,orderId,txnToken
-                    const f=await axios.post(`${host}/api/transaction/addTransaction/${params}/${bookId}`,{
-                        ispaid:true,orderId:init.data.orderId,txnToken:init.data.txnToken,dormtitle:details.title,bookedon:new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), new Date().getHours(), new Date().getMinutes(), 0, 0),paymentUpi:paymentUpi,amount:booking.minimumDown
-
-                    },{
-                        headers:{
-                            "auth-token":Cookies.get("dorm--7z2__PMRW")
-                        }
-                    })
-                    console.log(f.data)
-
-
-                    let obj=details.totalbed
-           for(var i in booking.totalbedorrooms){
-                obj[i]=booking.totalbedorrooms[i]['beds']?(obj[i]-booking.totalbedorrooms[i]['beds']):(obj[i]-(booking.totalbedorrooms[i]['rooms']*i))
-           }
-           console.log(obj)
-           const updatehosting=await axios.put(`${host}/api/hosting/updateHosting/${params}`,{totalbed:obj},{
-            headers:{
-                "auth-token":Cookies.get('dorm--7z2__PMRW')
-            }
-        })
-        console.log(updatehosting.data)
-        setProgress(100)
-                } catch (error) {
-                    console.log(error)
-                    alert(error)
-                }
-               
-                navigate(`/paymentstatus/${params}/${bookId}`)
-                return
-            }
-            
-
-
-            }, 7000);
-            }
-            else{
-                alert("upi is not valid")
-            }
-
-          
-           
-            
-        } catch (error) {
-            console.log(error)
-            alert(error)
+            let payementObject = new window.Razorpay(options);
+            payementObject.open();
         }
       }
+      catch (error) {
+        console.log(error)
+        alert(error)
+    }
+}
       useEffect(() => {
         if(!Cookies.get('dorm--7z2__PMRW'))
         navigate('/login')
