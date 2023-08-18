@@ -23,7 +23,7 @@ import { collection, query, where, getDocs, getDoc, addDoc, doc, onSnapshot, lim
 const app = express()
 const PORT=process.env.PORT||5000
 app.use(cors())
-app.disable('x-powered-by')
+// app.disable('x-powered-by')
 
 app.use(bodyParser.json({ limit: '30mb', extended: true }))
 app.use(bodyParser.urlencoded({ limit: '30mb', extended: true }))
@@ -32,7 +32,7 @@ const __filename = fileURLToPath(import.meta.url);
 
 const __dirname = path.dirname(__filename);
 
-const mongoURI="mongodb+srv://sksachin7z2:ne3e6EGnklkQaiw3@cluster0.hlrymf6.mongodb.net/?retryWrites=true&w=majority"
+const mongoURI="mongodb+srv://sksachin7z2:ne3e6EGnklkQaiw3@cluster0.hlrymf6.mongodb.net/dorminn?retryWrites=true&w=majority"
 // const mongoURI="mongodb://127.0.0.1:27017/npk?readPreference=primary&appname=MongoDB%20Compass&directConnection=true&ssl=false"
 const conn = mongoose.createConnection(mongoURI,()=>{
   console.log("connected to mongo")
@@ -99,14 +99,6 @@ app.post('/uploads/:id',upload.array('file'), async (req, res, next) => {
         }
     
     });
-
-app.use((err, req, res, next) => {
-  res.status(500).json({
-    error: err,
-    message: 'Internal server error!',
-  })
-  next()
-})
 app.get('/image/:filename', (req, res) => {
   gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
     // Check if file
