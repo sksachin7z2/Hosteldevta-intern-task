@@ -41,7 +41,7 @@ import UserTransaction from './pages/UserTransaction';
 import ResetPassword from './pages/ResetPassword';
 import LoadingBar from 'react-top-loading-bar'
 function App(props) {
-  const host="http://localhost:5000"
+  const host="http://dorminn-7z2-prod.onrender.com"
   const [lat, setLat] = useState(0)
 const [lon, setLon] = useState(0)
 const getlocation=()=>{

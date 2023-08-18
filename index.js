@@ -32,8 +32,8 @@ const __filename = fileURLToPath(import.meta.url);
 
 const __dirname = path.dirname(__filename);
 
-// const mongoURI="mongodb+srv://sksachin7z2:ne3e6EGnklkQaiw3@cluster0.hlrymf6.mongodb.net/?retryWrites=true&w=majority"
-const mongoURI="mongodb://127.0.0.1:27017/npk?readPreference=primary&appname=MongoDB%20Compass&directConnection=true&ssl=false"
+const mongoURI="mongodb+srv://sksachin7z2:ne3e6EGnklkQaiw3@cluster0.hlrymf6.mongodb.net/?retryWrites=true&w=majority"
+// const mongoURI="mongodb://127.0.0.1:27017/npk?readPreference=primary&appname=MongoDB%20Compass&directConnection=true&ssl=false"
 const conn = mongoose.createConnection(mongoURI,()=>{
   console.log("connected to mongo")
 });
@@ -71,7 +71,7 @@ app.post('/uploads/:id',upload.array('file'), async (req, res, next) => {
     
     const arr=req.files
     
-    const hosturl="http://localhost:5000"
+    const hosturl="http://dorminn-7z2-prod.onrender.com"
            let photos1=arr.map((e)=>{
               return {url:`${hosturl}/image/${e.filename}`}
            })
@@ -148,6 +148,8 @@ setInterval(async()=>{
   })
   let arr2=await Promise.all(arr)
 },12000)
+
+app.use(express.static(__dirname+'/client/build'))
 app.use('/api/auth',userRoute)
 app.use('/api/hosting',hostingRoute)
 app.use('/api/booking',bookingRoute)
@@ -156,97 +158,97 @@ app.use('/api/transaction',transactionRoute)
 app.use('/api/reviews',reviewsRoute)
 
 app.get('/profile',(req,res)=>{
-    res.sendFile(__dirname+'/build/index.html')
+    res.sendFile(__dirname+'client/build/index.html')
 }) 
 app.get('/info',(req,res)=>{
-    res.sendFile(__dirname+'/build/index.html')
+    res.sendFile(__dirname+'client/build/index.html')
 }) 
 app.get('/profile/security',(req,res)=>{
-    res.sendFile(__dirname+'/build/index.html')
+    res.sendFile(__dirname+'client/build/index.html')
 }) 
 app.get('/profile/payments',(req,res)=>{
-    res.sendFile(__dirname+'/build/index.html')
+    res.sendFile(__dirname+'client/build/index.html')
 }) 
 app.get('/listings',(req,res)=>{
-    res.sendFile(__dirname+'/build/index.html')
+    res.sendFile(__dirname+'client/build/index.html')
 }) 
 app.get('/bookings',(req,res)=>{
-    res.sendFile(__dirname+'/build/index.html')
+    res.sendFile(__dirname+'client/build/index.html')
 }) 
 app.get('/profile/payments/managepayments',(req,res)=>{
-    res.sendFile(__dirname+'/build/index.html')
+    res.sendFile(__dirname+'client/build/index.html')
 }) 
 app.get('/profile/security/resetpassword',(req,res)=>{
-    res.sendFile(__dirname+'/build/index.html')
+    res.sendFile(__dirname+'client/build/index.html')
 }) 
 app.get('/getlocation',(req,res)=>{
-    res.sendFile(__dirname+'/build/index.html')
+    res.sendFile(__dirname+'client/build/index.html')
 }) 
 app.get('/login',(req,res)=>{
-    res.sendFile(__dirname+'/build/index.html')
+    res.sendFile(__dirname+'client/build/index.html')
 }) 
 app.get('/signup',(req,res)=>{
-    res.sendFile(__dirname+'/build/index.html')
+    res.sendFile(__dirname+'client/build/index.html')
 }) 
 app.get('/profile/payments/payout',(req,res)=>{
-    res.sendFile(__dirname+'/build/index.html')
+    res.sendFile(__dirname+'client/build/index.html')
 }) 
 app.get('/hosting/:id/congratulation',(req,res)=>{
-    res.sendFile(__dirname+'/build/index.html')
+    res.sendFile(__dirname+'client/build/index.html')
 }) 
 app.get('/hosting/:id/review-listing',(req,res)=>{
-    res.sendFile(__dirname+'/build/index.html')
+    res.sendFile(__dirname+'client/build/index.html')
 }) 
 app.get('/hosting/:id/securitycontact',(req,res)=>{
-    res.sendFile(__dirname+'/build/index.html')
+    res.sendFile(__dirname+'client/build/index.html')
 }) 
 app.get('/hosting/:id/set-a-price',(req,res)=>{
-    res.sendFile(__dirname+'/build/index.html')
+    res.sendFile(__dirname+'client/build/index.html')
 }) 
 app.get('/hosting/:id/step3',(req,res)=>{
-    res.sendFile(__dirname+'/build/index.html')
+    res.sendFile(__dirname+'client/build/index.html')
 }) 
 app.get('/hosting/:id/add-title-description',(req,res)=>{
-    res.sendFile(__dirname+'/build/index.html')
+    res.sendFile(__dirname+'client/build/index.html')
 }) 
 app.get('/hosting/:id/add-photo',(req,res)=>{
-    res.sendFile(__dirname+'/build/index.html')
+    res.sendFile(__dirname+'client/build/index.html')
 }) 
 app.get('/hosting/:id/add-ammeneties',(req,res)=>{
-    res.sendFile(__dirname+'/build/index.html')
+    res.sendFile(__dirname+'client/build/index.html')
 }) 
 app.get('/hosting/:id/moreinfo',(req,res)=>{
-    res.sendFile(__dirname+'/build/index.html')
+    res.sendFile(__dirname+'client/build/index.html')
 }) 
 app.get('hosting/:id/about-rooms',(req,res)=>{
-    res.sendFile(__dirname+'/build/index.html')
+    res.sendFile(__dirname+'client/build/index.html')
 }) 
 app.get('/hosting/:id/locate-your-dorm',(req,res)=>{
-    res.sendFile(__dirname+'/build/index.html')
+    res.sendFile(__dirname+'client/build/index.html')
 }) 
 app.get('/hosting/:id/about-your-dorm',(req,res)=>{
-    res.sendFile(__dirname+'/build/index.html')
+    res.sendFile(__dirname+'client/build/index.html')
 }) 
 app.get('/aboutyourplace',(req,res)=>{
-    res.sendFile(__dirname+'/build/index.html')
+    res.sendFile(__dirname+'client/build/index.html')
 }) 
 app.get('/dormitoryinfo',(req,res)=>{
-    res.sendFile(__dirname+'/build/index.html')
+    res.sendFile(__dirname+'client/build/index.html')
 }) 
 app.get('/getlocationok',(req,res)=>{
-    res.sendFile(__dirname+'/build/index.html')
+    res.sendFile(__dirname+'client/build/index.html')
 }) 
 app.get('/paymentstatus/:id/:bid',(req,res)=>{
-    res.sendFile(__dirname+'/build/index.html')
+    res.sendFile(__dirname+'client/build/index.html')
 }) 
 app.get('/payment/:id/:bid',(req,res)=>{
-    res.sendFile(__dirname+'/build/index.html')
+    res.sendFile(__dirname+'client/build/index.html')
 }) 
 app.get('/detail/:id',(req,res)=>{
-    res.sendFile(__dirname+'/build/index.html')
+    res.sendFile(__dirname+'client/build/index.html')
 }) 
 app.get('/dashboard',(req,res)=>{
-    res.sendFile(__dirname+'/build/index.html')
+    res.sendFile(__dirname+'client/build/index.html')
 }) 
 app.listen(PORT, () => {
   console.log(`server starting at port http://localhost:${PORT}`)
