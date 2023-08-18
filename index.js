@@ -21,7 +21,7 @@ import GridFsStorage from 'multer-gridfs-storage'
 
 import { collection, query, where, getDocs, getDoc, addDoc, doc, onSnapshot, limit, deleteDoc,updateDoc } from "firebase/firestore";
 const app = express()
-const PORT=5000
+const PORT=process.env.PORT||5000
 app.use(cors())
 app.disable('x-powered-by')
 
@@ -158,97 +158,97 @@ app.use('/api/transaction',transactionRoute)
 app.use('/api/reviews',reviewsRoute)
 
 app.get('/profile',(req,res)=>{
-    res.sendFile(__dirname+'client/build/index.html')
+    res.sendFile(__dirname+'/client/build/index.html')
 }) 
 app.get('/info',(req,res)=>{
-    res.sendFile(__dirname+'client/build/index.html')
+    res.sendFile(__dirname+'/client/build/index.html')
 }) 
 app.get('/profile/security',(req,res)=>{
-    res.sendFile(__dirname+'client/build/index.html')
+    res.sendFile(__dirname+'/client/build/index.html')
 }) 
 app.get('/profile/payments',(req,res)=>{
-    res.sendFile(__dirname+'client/build/index.html')
+    res.sendFile(__dirname+'/client/build/index.html')
 }) 
 app.get('/listings',(req,res)=>{
-    res.sendFile(__dirname+'client/build/index.html')
+    res.sendFile(__dirname+'/client/build/index.html')
 }) 
 app.get('/bookings',(req,res)=>{
-    res.sendFile(__dirname+'client/build/index.html')
+    res.sendFile(__dirname+'/client/build/index.html')
 }) 
 app.get('/profile/payments/managepayments',(req,res)=>{
-    res.sendFile(__dirname+'client/build/index.html')
+    res.sendFile(__dirname+'/client/build/index.html')
 }) 
 app.get('/profile/security/resetpassword',(req,res)=>{
-    res.sendFile(__dirname+'client/build/index.html')
+    res.sendFile(__dirname+'/client/build/index.html')
 }) 
 app.get('/getlocation',(req,res)=>{
-    res.sendFile(__dirname+'client/build/index.html')
+    res.sendFile(__dirname+'/client/build/index.html')
 }) 
 app.get('/login',(req,res)=>{
-    res.sendFile(__dirname+'client/build/index.html')
+    res.sendFile(__dirname+'/client/build/index.html')
 }) 
 app.get('/signup',(req,res)=>{
-    res.sendFile(__dirname+'client/build/index.html')
+    res.sendFile(__dirname+'/client/build/index.html')
 }) 
 app.get('/profile/payments/payout',(req,res)=>{
-    res.sendFile(__dirname+'client/build/index.html')
+    res.sendFile(__dirname+'/client/build/index.html')
 }) 
 app.get('/hosting/:id/congratulation',(req,res)=>{
-    res.sendFile(__dirname+'client/build/index.html')
+    res.sendFile(__dirname+'/client/build/index.html')
 }) 
 app.get('/hosting/:id/review-listing',(req,res)=>{
-    res.sendFile(__dirname+'client/build/index.html')
+    res.sendFile(__dirname+'/client/build/index.html')
 }) 
 app.get('/hosting/:id/securitycontact',(req,res)=>{
-    res.sendFile(__dirname+'client/build/index.html')
+    res.sendFile(__dirname+'/client/build/index.html')
 }) 
 app.get('/hosting/:id/set-a-price',(req,res)=>{
-    res.sendFile(__dirname+'client/build/index.html')
+    res.sendFile(__dirname+'/client/build/index.html')
 }) 
 app.get('/hosting/:id/step3',(req,res)=>{
-    res.sendFile(__dirname+'client/build/index.html')
+    res.sendFile(__dirname+'/client/build/index.html')
 }) 
 app.get('/hosting/:id/add-title-description',(req,res)=>{
-    res.sendFile(__dirname+'client/build/index.html')
+    res.sendFile(__dirname+'/client/build/index.html')
 }) 
 app.get('/hosting/:id/add-photo',(req,res)=>{
-    res.sendFile(__dirname+'client/build/index.html')
+    res.sendFile(__dirname+'/client/build/index.html')
 }) 
 app.get('/hosting/:id/add-ammeneties',(req,res)=>{
-    res.sendFile(__dirname+'client/build/index.html')
+    res.sendFile(__dirname+'/client/build/index.html')
 }) 
 app.get('/hosting/:id/moreinfo',(req,res)=>{
-    res.sendFile(__dirname+'client/build/index.html')
+    res.sendFile(__dirname+'/client/build/index.html')
 }) 
 app.get('hosting/:id/about-rooms',(req,res)=>{
-    res.sendFile(__dirname+'client/build/index.html')
+    res.sendFile(__dirname+'/client/build/index.html')
 }) 
 app.get('/hosting/:id/locate-your-dorm',(req,res)=>{
-    res.sendFile(__dirname+'client/build/index.html')
+    res.sendFile(__dirname+'/client/build/index.html')
 }) 
 app.get('/hosting/:id/about-your-dorm',(req,res)=>{
-    res.sendFile(__dirname+'client/build/index.html')
+    res.sendFile(__dirname+'/client/build/index.html')
 }) 
 app.get('/aboutyourplace',(req,res)=>{
-    res.sendFile(__dirname+'client/build/index.html')
+    res.sendFile(__dirname+'/client/build/index.html')
 }) 
 app.get('/dormitoryinfo',(req,res)=>{
-    res.sendFile(__dirname+'client/build/index.html')
+    res.sendFile(__dirname+'/client/build/index.html')
 }) 
 app.get('/getlocationok',(req,res)=>{
-    res.sendFile(__dirname+'client/build/index.html')
+    res.sendFile(__dirname+'/client/build/index.html')
 }) 
 app.get('/paymentstatus/:id/:bid',(req,res)=>{
-    res.sendFile(__dirname+'client/build/index.html')
+    res.sendFile(__dirname+'/client/build/index.html')
 }) 
 app.get('/payment/:id/:bid',(req,res)=>{
-    res.sendFile(__dirname+'client/build/index.html')
+    res.sendFile(__dirname+'/client/build/index.html')
 }) 
 app.get('/detail/:id',(req,res)=>{
-    res.sendFile(__dirname+'client/build/index.html')
+    res.sendFile(__dirname+'/client/build/index.html')
 }) 
 app.get('/dashboard',(req,res)=>{
-    res.sendFile(__dirname+'client/build/index.html')
+    res.sendFile(__dirname+'/client/build/index.html')
 }) 
 app.listen(PORT, () => {
   console.log(`server starting at port http://localhost:${PORT}`)
