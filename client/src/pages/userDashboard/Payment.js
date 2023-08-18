@@ -155,7 +155,7 @@ function Payment({host,setProgress}) {
                 order_id: result.data.id,
                 name: "Ecommerce ",
                 description: "Test Transaction",
-                image: "./DormLogo.png",
+                image: "/DormLogo.png",
                 handler: async function (response) {
                     const result_1 = await axios.post(
                     `${host}/api/payment/getDetails`,
