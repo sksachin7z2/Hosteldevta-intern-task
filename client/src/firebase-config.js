@@ -7,13 +7,13 @@ import { getDatabase } from "firebase/database";
 // Your web app's Firebase configuration
 import {getAuth, GoogleAuthProvider} from 'firebase/auth'
 export const firebaseConfig = {
-  apiKey: "AIzaSyBEAfjAVysNRmPq6v8toqwxBFa7lyZ3vV0",
-  authDomain: "dorminn.firebaseapp.com",
-  projectId: "dorminn",
-  storageBucket: "dorminn.appspot.com",
-  messagingSenderId: "467403049747",
-  appId: "1:467403049747:web:4cb3f83e2eabed19cb68e6",
-  databaseURL: "https://dorminn-default-rtdb.firebaseio.com",
+  apiKey: "AIzaSyC74PSa8wJASjaAo9w1_z0bzTiWqsafJc4",
+  authDomain: "dorminn-6ba10.firebaseapp.com",
+  projectId: "dorminn-6ba10",
+  storageBucket: "dorminn-6ba10.appspot.com",
+  messagingSenderId: "1076140210981",
+  appId: "1:1076140210981:web:f4252b0b986dc4c58d78cc",
+  
 };
 
 // Initialize Firebase

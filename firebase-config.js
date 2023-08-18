@@ -13,13 +13,12 @@ import 'dotenv/config'
 // const {getAuth, GoogleAuthProvider} =require('firebase/auth')
 import {getAuth,GoogleAuthProvider} from 'firebase/auth'
  const firebaseConfig = {
-  apiKey: process.env.APIKEY,
-  authDomain: process.env.AUTHDOMAIN,
-  projectId: process.env.PROJECTID,
-  storageBucket: process.env.STORAGEBUCKET,
-  messagingSenderId: process.env.MESSAGINGSENDERID,
-  appId: process.env.APPID,
-  databaseURL: process.env.DATABASEURL,
+  apiKey: "AIzaSyC74PSa8wJASjaAo9w1_z0bzTiWqsafJc4",
+  authDomain: "dorminn-6ba10.firebaseapp.com",
+  projectId: "dorminn-6ba10",
+  storageBucket: "dorminn-6ba10.appspot.com",
+  messagingSenderId: "1076140210981",
+  appId: "1:1076140210981:web:f4252b0b986dc4c58d78cc"
 };
 
 // Initialize Firebase

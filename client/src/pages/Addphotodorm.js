@@ -37,7 +37,7 @@ function Addphotodorm({host}) {
         let formData=new FormData()
         for(var prop in files)
         formData.append("file",files[prop]);
-          const getphotos=await axios.post(`${host}/uploads`,formData,{
+          const getphotos=await axios.post(`${host}/uploads/${params}`,formData,{
             headers:{
               "Content-Type": "multipart/form-data"
             }
