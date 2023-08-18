@@ -13,6 +13,7 @@ import db from "./firebase-config.js";
 import mongoose from 'mongoose'
 import Grid from 'gridfs-stream'
 import multer from 'multer'
+import { fileURLToPath } from 'url';
 import GridFsStorage from 'multer-gridfs-storage'
 // import {mongo} from 'mongoose'
 
@@ -27,12 +28,12 @@ app.disable('x-powered-by')
 app.use(bodyParser.json({ limit: '30mb', extended: true }))
 app.use(bodyParser.urlencoded({ limit: '30mb', extended: true }))
 
+const __filename = fileURLToPath(import.meta.url);
+
+const __dirname = path.dirname(__filename);
 
 // const mongoURI="mongodb+srv://sksachin7z2:ne3e6EGnklkQaiw3@cluster0.hlrymf6.mongodb.net/?retryWrites=true&w=majority"
 const mongoURI="mongodb://127.0.0.1:27017/npk?readPreference=primary&appname=MongoDB%20Compass&directConnection=true&ssl=false"
-mongoose.connect(mongoURI,()=>{
-  console.log("mongo connected");
-})
 const conn = mongoose.createConnection(mongoURI,()=>{
   console.log("connected to mongo")
 });
