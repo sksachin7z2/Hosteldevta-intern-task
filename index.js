@@ -16,6 +16,7 @@ import { fileURLToPath } from 'url';
 import dotenv from 'dotenv'
 import GridFsStorage from 'multer-gridfs-storage'
 import paymentRoute from './routes/paymentgateway.js'
+import cron from 'node-cron'
 // import {mongo} from 'mongoose'
 dotenv.config()
 
@@ -65,6 +66,9 @@ const storage = new GridFsStorage({
   }
 });
 const upload = multer({ storage });
+cron.schedule('1,2,4,5 * * * *', () => {
+  console.log('running every minute 1, 2, 4 and 5');
+});
 app.post('/uploads/:id',upload.array('file'), async (req, res, next) => {
   try {
 
