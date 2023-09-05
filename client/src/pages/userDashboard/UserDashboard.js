@@ -8,6 +8,7 @@ import 'react-calendar/dist/Calendar.css';
 
 import Calendar from 'react-calendar';
 function UserDashboard({ host }) {
+  const [Search, setSearch] = useState("")
   const [adults, setAdults] = useState(0)
   const [room, setRoom] = useState(0)
   const [children, setChildren] = useState(0)
@@ -158,10 +159,15 @@ if(document.getElementById('stay').value===""){
 setFilter(listings)
 return
 }
-let arr=listings.filter((e,i)=>((e.address.country===address.country) && (e.address.administrative_area_level_1===address.administrative_area_level_1)&&(e.address.locality===address.locality)&&(ans[i]>=room)))
-console.log(arr,address.country)
+const regex = new RegExp(Search, "i");
+const matchingaddress = listings.filter( (e) => {
+  const addressString=e.address.country+e.address.administrative_area_level_1+e.address.locality;
+    return regex.test(addressString)
+});
 
-    setFilter(arr)
+
+
+    setFilter(matchingaddress)
   }
   return (
     <div className='h-[90vh] mt-[10vh]'>
@@ -178,7 +184,7 @@ console.log(arr,address.country)
             <div>
               <div>
                 <div class="relative">
-                  <input   ref={ref}  type="text" id="stay" class="block rounded-t-lg px-2.5 pb-2.5 pt-5 w-full text-sm text-gray-900 bg-gray-50  border-0 border-b-2 border-gray-300 " placeholder=" " />
+                  <input  value={Search} onChange={(e)=>{setSearch(e.target.value)}}  type="text" id="stay" class="block rounded-t-lg px-2.5 pb-2.5 pt-5 w-full text-sm text-gray-900 bg-gray-50  border-0 border-b-2 border-gray-300 " placeholder=" " />
                   <label for="stay" class="absolute text-sm text-gray-500  duration-300 transform -translate-y-4 scale-75 top-4 ">Where are you Staying ?</label>
                 </div>
               </div>

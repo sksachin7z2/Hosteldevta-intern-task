@@ -78,21 +78,21 @@ const handlemapclick=async(r,e,w)=>{
     console.log(error)
   }
 }
-  const { ref, autocompleteRef } = usePlacesWidget({
-    apiKey:process.env.REACT_APP_MAPKEY,
-    onPlaceSelected: (place) => {
-      // console.log(place);
-      console.log(place)
-      // console.log(place.geometry.location.lat(),place.geometry.location.lng())
-      try {
-        setLat(place.geometry.location.lat())
-        setLon(place.geometry.location.lng())
-      } catch (error) {
-        console.log(error)
-      }
+  // const { ref, autocompleteRef } = usePlacesWidget({
+  //   apiKey:process.env.REACT_APP_MAPKEY,
+  //   onPlaceSelected: (place) => {
+  //     // console.log(place);
+  //     console.log(place)
+  //     // console.log(place.geometry.location.lat(),place.geometry.location.lng())
+  //     try {
+  //       setLat(place.geometry.location.lat())
+  //       setLon(place.geometry.location.lng())
+  //     } catch (error) {
+  //       console.log(error)
+  //     }
    
-    }
-  });
+  //   }
+  // });
 
     return (
        <>
@@ -132,7 +132,7 @@ const handlemapclick=async(r,e,w)=>{
     <div onClick={()=>{setOwn(true)}} onMouseOut={()=>{setOwn(false)}} className=' my-5'>
 <div  className='flex justify-start items-center w-[100%]'>
             <div className='flex gap-3 items-center w-[100%]'>
-            <input ref={ref} type="text" id="first_name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-full focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
+            <input  type="text" id="first_name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-full focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
             "  placeholder="Enter your address" required/>
            
            <div className='right-[4%] top-[25%]'>

@@ -16,7 +16,7 @@ import { fileURLToPath } from 'url';
 import dotenv from 'dotenv'
 import GridFsStorage from 'multer-gridfs-storage'
 import paymentRoute from './routes/paymentgateway.js'
-import cron from 'node-cron'
+import axios from 'axios'
 // import {mongo} from 'mongoose'
 dotenv.config()
 
@@ -65,10 +65,18 @@ const storage = new GridFsStorage({
     });
   }
 });
-const upload = multer({ storage });
-cron.schedule('1,2,4,5 * * * *', () => {
-  console.log('running every minute 1, 2, 4 and 5');
-});
+const upload=multer({storage});
+const host='https://dorminn-7z2-prod.onrender.com'
+
+app.get('/api/temp',(req,res)=>{
+  res.send('welcome to dorminn server');
+})
+setInterval(async()=>{
+
+  let res= await axios.get(`${host}/api/temp`);
+  console.log(res.data);
+},180000)
+
 app.post('/uploads/:id',upload.array('file'), async (req, res, next) => {
   try {
 
