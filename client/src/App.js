@@ -7,7 +7,7 @@ import {useState,useEffect} from 'react'
 import Landing from './pages/Landing';
 import Hosting from './pages/Hosting';
 import Navbar from './components/Navbar';
-import Gethostlocation from './components/GethostLocation' 
+
 import Getyourlocation from './components/Getyourlocation' 
 import {UserAuthContextProvider  as Context} from './context/auth'
 import Aboutyourplace from './components/Aboutyourplace'
@@ -42,7 +42,7 @@ import ResetPassword from './pages/ResetPassword';
 import LoadingBar from 'react-top-loading-bar'
 function App(props) {
   // const host="http://localhost:5000"
-  const host="https://dorminn-7z2-prod.onrender.com"
+  const host="https://dorminn-1-j5416869.deta.app"
   const [lat, setLat] = useState(0)
 const [lon, setLon] = useState(0)
 const getlocation=()=>{
@@ -103,10 +103,7 @@ const [progress,setProgress]=useState(0)
         <Route exact path='/profile/security/resetpassword' element={ <ResetPassword host={host}/> }  />
 
 
-        <Route exact path='/getlocation' element={ <Gethostlocation host={host} google={props.google}
-					center={{lat: lat, lng: lon}}
-					height='300px'
-					zoom={15}/> }  />
+  
           <Route exact path='/signup' element={<Signup host={host}/>}/> 
           <Route exact path='/login' element={<Login host={host}/>}/> 
                 </Routes>
