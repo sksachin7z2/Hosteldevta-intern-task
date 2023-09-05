@@ -180,6 +180,9 @@ app.get('/listings',(req,res)=>{
 app.get('/bookings',(req,res)=>{
     res.sendFile(__dirname+'/client/build/index.html')
 }) 
+app.get('/hostdashboard',(req,res)=>{
+    res.sendFile(__dirname+'/client/build/index.html')
+}) 
 app.get('/profile/payments/managepayments',(req,res)=>{
     res.sendFile(__dirname+'/client/build/index.html')
 }) 
