@@ -135,24 +135,24 @@ app.get('/image/:filename', (req, res) => {
   });
 });
 
-setInterval(async()=>{
-  const querySnapshot = await getDocs(collection(db, "booking"));
- let arr= querySnapshot.docs.map(async(e)=>{
-    if((new Date(e.data().checkout)<new Date()) && (e.data().ispaid===true))
-    {
-      try {
-        const docRef = doc(db, "booking", e.id);
-        const update=await updateDoc(docRef,{isfree:false})
+// setInterval(async()=>{
+//   const querySnapshot = await getDocs(collection(db, "booking"));
+//  let arr= querySnapshot.docs.map(async(e)=>{
+//     if((new Date(e.data().checkout)<new Date()) && (e.data().ispaid===true))
+//     {
+//       try {
+//         const docRef = doc(db, "booking", e.id);
+//         const update=await updateDoc(docRef,{isfree:false})
         
-      } catch (error) {
-        console.log(error)
-      }
+//       } catch (error) {
+//         console.log(error)
+//       }
     
-    }
-    return 0
-  })
-  let arr2=await Promise.all(arr)
-},12000)
+//     }
+//     return 0
+//   })
+//   let arr2=await Promise.all(arr)
+// },12000)
 
 app.use(express.static(__dirname+'/client/build'))
 app.use('/api/auth',userRoute)
