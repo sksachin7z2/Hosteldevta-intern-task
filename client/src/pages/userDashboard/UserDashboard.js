@@ -97,8 +97,8 @@ console.log(arr4)
 
   }
   useEffect(() => {
-    if(!Cookies.get('dorm--7z2__PMRW'))
-      navigate('/login')
+    // if(!Cookies.get('dorm--7z2__PMRW'))
+    //   navigate('/login')
     getdata();
     getroomdata()
   }, [])

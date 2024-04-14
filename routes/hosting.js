@@ -42,7 +42,7 @@ router.post("/fetchallHosting",fetchuser, async (req, res) => {
   }
 
 });
-router.post("/fetchHosting/:id",fetchuser, async (req, res) => {
+router.post("/fetchHosting/:id", async (req, res) => {
   try {
     
     const hostId=req.params.id

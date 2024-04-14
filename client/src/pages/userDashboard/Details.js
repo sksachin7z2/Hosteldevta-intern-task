@@ -282,8 +282,8 @@ console.log(error)
         
   }
       useEffect(() => {
-        if(!Cookies.get('dorm--7z2__PMRW'))
-        navigate('/login')
+        // if(!Cookies.get('dorm--7z2__PMRW'))
+        // navigate('/login')
         getdata()
        getroomdata();
        getreviews()
@@ -344,7 +344,10 @@ console.log(error)
       
       }
       const handlebooking=async(e)=>{
-
+        if(!Cookies.get('dorm--7z2__PMRW')){
+            alert("Login to book")
+            return;
+        }
         let totalbed=0
         console.log(rd)
         let totalprice=0
@@ -517,6 +520,10 @@ console.log(error)
       const handlestar=async()=>{
         try {
         //    if(star)
+        if(!Cookies.get('dorm--7z2__PMRW')){
+            alert("Login to give star")
+            return;
+        }
                 let arr=reviewinfo.stari;
                 let obj=[{
                     user:userId,
@@ -567,7 +574,10 @@ console.log(error)
       const [reviews, setReviews] = useState([])
       const handleiupdatereviews=async()=>{
         try {
-            
+            if(!Cookies.get('dorm--7z2__PMRW')){
+                alert("Login to give comments")
+                return;
+            }
             const f=await axios.post(`${host}/api/reviews/updatereviews/${params}`,{
                 reviews:{stari:reviewinfo.stari,star:reviewinfo.star,comments:[...reviews,{user:Cookies.get('name'),comment:comment}]}
             })
